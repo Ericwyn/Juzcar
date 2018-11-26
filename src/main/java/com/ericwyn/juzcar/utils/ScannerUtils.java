@@ -3,11 +3,15 @@ package com.ericwyn.juzcar.utils;
 import com.ericwyn.juzcar.IWhat;
 import com.ericwyn.juzcar.Juzcar;
 import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
+import com.ericwyn.juzcar.utils.obj.Analysis;
+import com.ericwyn.juzcar.utils.obj.ApiAnalysis;
+import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 import com.ericwyn.juzcar.utils.obj.JuzcarClass;
 import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -16,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ericwyn on 18-11-25.
@@ -28,9 +33,17 @@ public class ScannerUtils {
             "org.springframework.web.bind.annotation.RestController"
     );
 
-    private static List<String> methodAnnotaions = Arrays.asList(
-            "org.springframework.web.bind.annotation.RequestMapping"
-    );
+    // 创建一个 回调方法的 map 用来对包含特定注解的 Map 进行处理
+    // 因为要确保对 Spring 框架无依赖，所以这里对注解的处理不能直接将注解转换成已有注解类，而只能通过反射获取注解的get方法，再获取值
+    private static HashMap<String, ApiAnalysis>  apiAnalysisMap = new HashMap<String, ApiAnalysis>(){
+        {
+            put("org.springframework.web.bind.annotation.RequestMapping", Analysis.org_springframework_web_bind_annotation_RequestMapping);
+        }
+    };
+    private static Set<String> methodAnnotaions = apiAnalysisMap.keySet();
+
+
+
 
     public static void scanPackage(String iPackage, IWhat what){
         String path = iPackage.replace(".","/");
@@ -135,6 +148,34 @@ public class ScannerUtils {
             methodMap.put(key,methodList);
         }
         return methodMap;
+    }
+
+    /**
+     * 从已经分组好的 JuzcarMethod 里面扫描出 JuzcarApi，方便后续处理
+     *
+     * @param methodMap
+     * @return
+     */
+    public static HashMap<String, List<JuzcarApi>> scannerAPI(HashMap<String, List<JuzcarMethod>> methodMap){
+        HashMap<String, List<JuzcarApi>> apiMap = new HashMap<>();
+        for (String packageName : methodMap.keySet()){
+            List<JuzcarApi> apiList = new ArrayList<>();
+            List<JuzcarMethod> methodList = methodMap.get(packageName);
+            for (JuzcarMethod method : methodList){
+                // 分析 method 里面的注解，对 Api 注解进行分析并且返回 JuzcarApi 对象，将 Method 的注解变成一个个 API
+                for (String anName : method.getAnnotationMap().keySet()){
+                    if (methodAnnotaions.contains(anName)){
+                        ApiAnalysis analysis = apiAnalysisMap.get(anName);
+                        Annotation annotation = method.getAnnotationMap().get(anName);
+                        JuzcarApi api = analysis.analysis(annotation);
+                        apiList.add(api);
+//                        methodList.add(apiAnalysisMap.get(anName).analysis(method.getAnnotationMap().get(anName)))
+                    }
+                }
+            }
+            apiMap.put(packageName, apiList);
+        }
+        return apiMap;
     }
 
     private static void fetchFileList(File dir,List<File> fileList){
