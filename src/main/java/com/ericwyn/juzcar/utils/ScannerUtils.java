@@ -2,14 +2,18 @@ package com.ericwyn.juzcar.utils;
 
 import com.ericwyn.juzcar.IWhat;
 import com.ericwyn.juzcar.Juzcar;
+import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
 import com.ericwyn.juzcar.utils.obj.JuzcarClass;
+import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,9 +22,14 @@ import java.util.List;
  */
 public class ScannerUtils {
 
+    // 应该再写一层分析工具，分析工具是一个 Map<String, Fun> ，然后下面的这些 List，就是这些 Map 的 ketSet
     private static List<String> classAnnotaions = Arrays.asList(
             "org.springframework.stereotype.Controller",
             "org.springframework.web.bind.annotation.RestController"
+    );
+
+    private static List<String> methodAnnotaions = Arrays.asList(
+            "org.springframework.web.bind.annotation.RequestMapping"
     );
 
     public static void scanPackage(String iPackage, IWhat what){
@@ -66,7 +75,7 @@ public class ScannerUtils {
                 for (Annotation an : annotations){
                     // 如果 Class 中包含了与 Controller 有关的 注解
                     if (classAnnotaions.contains(an.annotationType().getName().toString())){
-                        res.add(new JuzcarClass(clazz, Arrays.asList(annotations)));
+                        res.add(new JuzcarClass(clazz, annotations));
                         break;
                     }
                 }
@@ -85,11 +94,47 @@ public class ScannerUtils {
         JuzcarClass clazzTemp;
         while (iterator.hasNext()){
             clazzTemp = iterator.next();
-            if (clazzTemp.getAnnotationNames().contains("com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner")){
+            if (clazzTemp.getAnnotationMap().keySet().contains("com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner")){
                 iterator.remove();
             }
         }
         return classList;
+    }
+
+    /**
+     * 从 Class 列表当中扫描出 Method, Method 按照 Class 名称分组
+     * @param classList
+     * @return
+     */
+    public static HashMap<String,List<JuzcarMethod>> scannerMethods(List<JuzcarClass> classList){
+        HashMap<String, List<JuzcarMethod>> methodMap = new HashMap<>();
+        for (JuzcarClass juzcarClass : classList){
+            Class clazz = juzcarClass.getClazz();
+            String key = clazz.getName();
+            ArrayList<JuzcarMethod> methodList = new ArrayList<>();
+            Method[] methods = clazz.getMethods();
+
+            for (Method method : methods){
+                boolean scannerFlag = false;
+                boolean ignoreFlag = false;
+                Annotation[] annotations = method.getAnnotations();
+                for (Annotation an : annotations){
+                    if (methodAnnotaions.contains(an.annotationType().getName())){
+                        scannerFlag = true;
+                    }
+                    if (an.annotationType().getName().equals(JuzcarIgnoreScanner.class.getName())){
+                        ignoreFlag = true;
+                    }
+                }
+                // 既含有需要被扫描的 flag 又不被 Ignore 标记
+                if (scannerFlag && !ignoreFlag){
+                    JuzcarMethod juzcarMethod = new JuzcarMethod(method,method.getAnnotations());
+                    methodList.add(juzcarMethod);
+                }
+            }
+            methodMap.put(key,methodList);
+        }
+        return methodMap;
     }
 
     private static void fetchFileList(File dir,List<File> fileList){
