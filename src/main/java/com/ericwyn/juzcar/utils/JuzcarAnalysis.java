@@ -1,4 +1,7 @@
-package com.ericwyn.juzcar.utils.obj;
+package com.ericwyn.juzcar.utils;
+
+import com.ericwyn.juzcar.utils.cb.ApiAnalysis;
+import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -9,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * Created by Ericwyn on 18-11-26.
  */
-public class Analysis {
+public class JuzcarAnalysis {
     public static ApiAnalysis org_springframework_web_bind_annotation_RequestMapping = new ApiAnalysis() {
         @Override
         public JuzcarApi analysis(Annotation annotation) {

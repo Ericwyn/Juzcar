@@ -1,17 +1,14 @@
 package com.ericwyn.juzcar.utils;
 
-import com.ericwyn.juzcar.IWhat;
-import com.ericwyn.juzcar.Juzcar;
+import com.ericwyn.juzcar.utils.cb.ScannerCallBack;
 import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
-import com.ericwyn.juzcar.utils.obj.Analysis;
-import com.ericwyn.juzcar.utils.obj.ApiAnalysis;
+import com.ericwyn.juzcar.utils.cb.ApiAnalysis;
 import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 import com.ericwyn.juzcar.utils.obj.JuzcarClass;
 import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -37,15 +34,14 @@ public class ScannerUtils {
     // 因为要确保对 Spring 框架无依赖，所以这里对注解的处理不能直接将注解转换成已有注解类，而只能通过反射获取注解的get方法，再获取值
     private static HashMap<String, ApiAnalysis>  apiAnalysisMap = new HashMap<String, ApiAnalysis>(){
         {
-            put("org.springframework.web.bind.annotation.RequestMapping", Analysis.org_springframework_web_bind_annotation_RequestMapping);
+            put("org.springframework.web.bind.annotation.RequestMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_RequestMapping);
         }
     };
     private static Set<String> methodAnnotaions = apiAnalysisMap.keySet();
 
 
-
-
-    public static void scanPackage(String iPackage, IWhat what){
+    // 包扫描
+    public static void scanPackage(String iPackage, ScannerCallBack callback){
         String path = iPackage.replace(".","/");
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         try {
@@ -63,9 +59,9 @@ public class ScannerUtils {
                         String nosuffixFileName = fileName.substring(8+fileName.lastIndexOf("classes"),fileName.indexOf(".class"));
                         String filePackage = nosuffixFileName.replaceAll("/", ".");
                         Class<?> clazz = Class.forName(filePackage);
-                        what.execute(f,clazz);
+                        callback.callback(f,clazz);
                     }else {
-                        what.execute(f,null);
+                        callback.callback(f,null);
                     }
                 }
             }
@@ -81,9 +77,9 @@ public class ScannerUtils {
      */
     public static List<JuzcarClass> scannerAllController(Class initClass){
         ArrayList<JuzcarClass> res = new ArrayList<>();
-        scanPackage(initClass.getPackage().getName(), new IWhat() {
+        scanPackage(initClass.getPackage().getName(), new ScannerCallBack() {
             @Override
-            public void execute(File file, Class<?> clazz) {
+            public void callback(File file, Class<?> clazz) {
                 Annotation[] annotations = clazz.getAnnotations();
                 for (Annotation an : annotations){
                     // 如果 Class 中包含了与 Controller 有关的 注解

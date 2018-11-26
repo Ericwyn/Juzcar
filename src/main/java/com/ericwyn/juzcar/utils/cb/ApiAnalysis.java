@@ -1,4 +1,6 @@
-package com.ericwyn.juzcar.utils.obj;
+package com.ericwyn.juzcar.utils.cb;
+
+import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 
 import java.lang.annotation.Annotation;
 

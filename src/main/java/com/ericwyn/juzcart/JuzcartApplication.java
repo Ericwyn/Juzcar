@@ -1,6 +1,6 @@
 package com.ericwyn.juzcart;
 
-import com.ericwyn.juzcar.utils.JuzcarServer;
+import com.ericwyn.juzcar.JuzcarServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

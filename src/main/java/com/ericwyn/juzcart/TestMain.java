@@ -1,6 +1,6 @@
 package com.ericwyn.juzcart;
 
-import com.ericwyn.juzcar.utils.JuzcarServer;
+import com.ericwyn.juzcar.JuzcarServer;
 
 /**
  * Created by Ericwyn on 18-11-26.

@@ -1,9 +1,9 @@
-package com.ericwyn.juzcar.utils;
+package com.ericwyn.juzcar;
 
+import com.ericwyn.juzcar.utils.ScannerUtils;
 import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 import com.ericwyn.juzcar.utils.obj.JuzcarClass;
 import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
-import com.ericwyn.juzcart.JuzcartApplication;
 
 import java.util.HashMap;
 import java.util.List;
