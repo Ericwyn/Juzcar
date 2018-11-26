@@ -1,5 +1,7 @@
 package com.ericwyn.juzcar.utils.obj;
 
+import java.util.List;
+
 /**
  *
  * API 的抽象类
@@ -9,6 +11,7 @@ package com.ericwyn.juzcar.utils.obj;
 public class JuzcarApi {
     private String[] url;
     private String[] method;
+    private List<JuzcarParam> params;
 
     public JuzcarApi() {
 
@@ -28,5 +31,13 @@ public class JuzcarApi {
 
     public void setUrl(String[] url) {
         this.url = url;
+    }
+
+    public List<JuzcarParam> getParams() {
+        return params;
+    }
+
+    public void setParams(List<JuzcarParam> params) {
+        this.params = params;
     }
 }

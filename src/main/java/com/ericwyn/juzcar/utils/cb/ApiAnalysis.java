@@ -3,6 +3,7 @@ package com.ericwyn.juzcar.utils.cb;
 import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * API 分析回调函数
@@ -10,5 +11,6 @@ import java.lang.annotation.Annotation;
  * Created by Ericwyn on 18-11-26.
  */
 public interface ApiAnalysis {
-    public JuzcarApi analysis(Annotation annotation);
+    // 原本的 Method
+    public JuzcarApi analysis(Method method, Annotation annotation);
 }

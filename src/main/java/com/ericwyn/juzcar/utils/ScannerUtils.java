@@ -35,8 +35,11 @@ public class ScannerUtils {
     private static HashMap<String, ApiAnalysis>  apiAnalysisMap = new HashMap<String, ApiAnalysis>(){
         {
             put("org.springframework.web.bind.annotation.RequestMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_RequestMapping);
+            put("org.springframework.web.bind.annotation.PostMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_PostMapping);
+            put("org.springframework.web.bind.annotation.GetMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_GetMapping);
         }
     };
+
     private static Set<String> methodAnnotaions = apiAnalysisMap.keySet();
 
 
@@ -83,7 +86,7 @@ public class ScannerUtils {
                 Annotation[] annotations = clazz.getAnnotations();
                 for (Annotation an : annotations){
                     // 如果 Class 中包含了与 Controller 有关的 注解
-                    if (classAnnotaions.contains(an.annotationType().getName().toString())){
+                    if (classAnnotaions.contains(an.annotationType().getName())){
                         res.add(new JuzcarClass(clazz, annotations));
                         break;
                     }
@@ -161,9 +164,9 @@ public class ScannerUtils {
                 // 分析 method 里面的注解，对 Api 注解进行分析并且返回 JuzcarApi 对象，将 Method 的注解变成一个个 API
                 for (String anName : method.getAnnotationMap().keySet()){
                     if (methodAnnotaions.contains(anName)){
-                        ApiAnalysis analysis = apiAnalysisMap.get(anName);
+                        ApiAnalysis apiAnalysis = apiAnalysisMap.get(anName);
                         Annotation annotation = method.getAnnotationMap().get(anName);
-                        JuzcarApi api = analysis.analysis(annotation);
+                        JuzcarApi api = apiAnalysis.analysis(method.getMethod(),annotation);
                         apiList.add(api);
 //                        methodList.add(apiAnalysisMap.get(anName).analysis(method.getAnnotationMap().get(anName)))
                     }

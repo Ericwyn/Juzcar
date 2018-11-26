@@ -1,7 +1,5 @@
 package com.ericwyn.juzcart;
 
-import com.ericwyn.juzcar.JuzcarServer;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +8,6 @@ public class JuzcartApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JuzcartApplication.class, args);
-        JuzcarServer.run(JuzcartApplication.class);
+//        JuzcarServer.run(JuzcartApplication.class);
     }
 }
