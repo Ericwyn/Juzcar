@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  *
  * Created by Ericwyn on 18-11-26.
  */
-public interface ApiAnalysis {
+public interface ApiAnalysisCb {
     // 原本的 Method
     public JuzcarApi analysis(Method method, Annotation annotation);
 }
