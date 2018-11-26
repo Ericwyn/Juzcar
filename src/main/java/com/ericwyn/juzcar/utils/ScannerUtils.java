@@ -1,8 +1,9 @@
 package com.ericwyn.juzcar.utils;
 
+import com.ericwyn.juzcar.utils.analysis.ApiAnalysis;
 import com.ericwyn.juzcar.utils.cb.ScannerCallBack;
 import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
-import com.ericwyn.juzcar.utils.cb.ApiAnalysis;
+import com.ericwyn.juzcar.utils.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.utils.obj.JuzcarApi;
 import com.ericwyn.juzcar.utils.obj.JuzcarClass;
 import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
@@ -32,11 +33,11 @@ public class ScannerUtils {
 
     // 创建一个 回调方法的 map 用来对包含特定注解的 Map 进行处理
     // 因为要确保对 Spring 框架无依赖，所以这里对注解的处理不能直接将注解转换成已有注解类，而只能通过反射获取注解的get方法，再获取值
-    private static HashMap<String, ApiAnalysis>  apiAnalysisMap = new HashMap<String, ApiAnalysis>(){
+    private static HashMap<String, ApiAnalysisCb>  apiAnalysisMap = new HashMap<String, ApiAnalysisCb>(){
         {
-            put("org.springframework.web.bind.annotation.RequestMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_RequestMapping);
-            put("org.springframework.web.bind.annotation.PostMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_PostMapping);
-            put("org.springframework.web.bind.annotation.GetMapping", JuzcarAnalysis.org_springframework_web_bind_annotation_GetMapping);
+            put("org.springframework.web.bind.annotation.RequestMapping", ApiAnalysis.org_springframework_web_bind_annotation_RequestMapping);
+            put("org.springframework.web.bind.annotation.PostMapping", ApiAnalysis.org_springframework_web_bind_annotation_PostMapping);
+            put("org.springframework.web.bind.annotation.GetMapping", ApiAnalysis.org_springframework_web_bind_annotation_GetMapping);
         }
     };
 
@@ -44,7 +45,7 @@ public class ScannerUtils {
 
 
     // 包扫描
-    public static void scanPackage(String iPackage, ScannerCallBack callback){
+    private static void scanPackage(String iPackage, ScannerCallBack callback){
         String path = iPackage.replace(".","/");
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         try {
@@ -164,7 +165,7 @@ public class ScannerUtils {
                 // 分析 method 里面的注解，对 Api 注解进行分析并且返回 JuzcarApi 对象，将 Method 的注解变成一个个 API
                 for (String anName : method.getAnnotationMap().keySet()){
                     if (methodAnnotaions.contains(anName)){
-                        ApiAnalysis apiAnalysis = apiAnalysisMap.get(anName);
+                        ApiAnalysisCb apiAnalysis = apiAnalysisMap.get(anName);
                         Annotation annotation = method.getAnnotationMap().get(anName);
                         JuzcarApi api = apiAnalysis.analysis(method.getMethod(),annotation);
                         apiList.add(api);

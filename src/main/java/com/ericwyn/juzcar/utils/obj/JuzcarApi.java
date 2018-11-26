@@ -1,5 +1,6 @@
 package com.ericwyn.juzcar.utils.obj;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,12 +10,21 @@ import java.util.List;
  * Created by Ericwyn on 18-11-26.
  */
 public class JuzcarApi {
+    private String name;
     private String[] url;
     private String[] method;
     private List<JuzcarParam> params;
 
     public JuzcarApi() {
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String[] getMethod() {
@@ -34,6 +44,9 @@ public class JuzcarApi {
     }
 
     public List<JuzcarParam> getParams() {
+        if (this.params == null){
+            this.params = new ArrayList<>();
+        }
         return params;
     }
 
