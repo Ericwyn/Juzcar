@@ -1,12 +1,12 @@
-package com.ericwyn.juzcar.utils;
+package com.ericwyn.juzcar.scan;
 
-import com.ericwyn.juzcar.utils.analysis.ApiAnalysis;
-import com.ericwyn.juzcar.utils.cb.ScannerCallBack;
-import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
-import com.ericwyn.juzcar.utils.cb.ApiAnalysisCb;
-import com.ericwyn.juzcar.utils.obj.JuzcarApi;
-import com.ericwyn.juzcar.utils.obj.JuzcarClass;
-import com.ericwyn.juzcar.utils.obj.JuzcarMethod;
+import com.ericwyn.juzcar.scan.analysis.ApiAnalysis;
+import com.ericwyn.juzcar.scan.cb.ScannerCallBack;
+import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
+import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
+import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarClass;
+import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -98,7 +98,7 @@ public class ScannerUtils {
     }
 
     /**
-     * 清除被 com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner 注解的 Class
+     * 清除被 com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner 注解的 Class
      * @param classList
      * @return
      */
@@ -107,7 +107,7 @@ public class ScannerUtils {
         JuzcarClass clazzTemp;
         while (iterator.hasNext()){
             clazzTemp = iterator.next();
-            if (clazzTemp.getAnnotationMap().keySet().contains("com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner")){
+            if (clazzTemp.getAnnotationMap().keySet().contains("com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner")){
                 iterator.remove();
             }
         }

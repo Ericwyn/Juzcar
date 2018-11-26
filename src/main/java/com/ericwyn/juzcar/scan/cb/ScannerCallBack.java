@@ -1,4 +1,4 @@
-package com.ericwyn.juzcar.utils.cb;
+package com.ericwyn.juzcar.scan.cb;
 
 import java.io.File;
 

@@ -1,9 +1,9 @@
-package com.ericwyn.juzcar.utils.analysis;
+package com.ericwyn.juzcar.scan.analysis;
 
-import com.ericwyn.juzcar.utils.cb.ApiAnalysisCb;
-import com.ericwyn.juzcar.utils.cb.ParamAnalysisCb;
-import com.ericwyn.juzcar.utils.obj.JuzcarApi;
-import com.ericwyn.juzcar.utils.obj.JuzcarParam;
+import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
+import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
+import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

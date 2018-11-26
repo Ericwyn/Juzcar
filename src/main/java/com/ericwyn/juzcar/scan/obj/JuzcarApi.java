@@ -1,4 +1,4 @@
-package com.ericwyn.juzcar.utils.obj;
+package com.ericwyn.juzcar.scan.obj;
 
 import java.util.ArrayList;
 import java.util.List;

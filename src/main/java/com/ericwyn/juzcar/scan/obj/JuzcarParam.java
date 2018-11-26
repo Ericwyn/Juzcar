@@ -1,4 +1,4 @@
-package com.ericwyn.juzcar.utils.obj;
+package com.ericwyn.juzcar.scan.obj;
 
 /**
  * Juzcar Api 当中，接口的请求参数

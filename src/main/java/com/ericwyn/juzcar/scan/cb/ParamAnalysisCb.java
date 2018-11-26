@@ -1,6 +1,6 @@
-package com.ericwyn.juzcar.utils.cb;
+package com.ericwyn.juzcar.scan.cb;
 
-import com.ericwyn.juzcar.utils.obj.JuzcarParam;
+import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;

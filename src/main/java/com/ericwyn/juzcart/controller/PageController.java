@@ -1,6 +1,6 @@
 package com.ericwyn.juzcart.controller;
 
-import com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner;
+import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
