@@ -1,5 +1,7 @@
 package com.ericwyn.juzcart.controller;
 
+import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ public class ApiController {
         return "HelloWorld";
     }
 
+    @JuzcarIgnoreScanner
     @PostMapping(value = "/api3")
     public String api3(@RequestParam("p1") Integer p1,
                        @RequestParam("p2") String p2){
