@@ -1,18 +1,27 @@
 package com.ericwyn.juzcar.utils;
 
 import com.ericwyn.juzcar.IWhat;
+import com.ericwyn.juzcar.Juzcar;
+import com.ericwyn.juzcar.utils.obj.JuzcarClass;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Ericwyn on 18-11-25.
  */
-public class PackageUtils {
+public class ScannerUtils {
+
+    private static List<String> classAnnotaions = Arrays.asList(
+            "org.springframework.stereotype.Controller",
+            "org.springframework.web.bind.annotation.RestController"
+    );
 
     public static void scanPackage(String iPackage, IWhat what){
         String path = iPackage.replace(".","/");
@@ -48,17 +57,17 @@ public class PackageUtils {
      * @param initClass
      * @return
      */
-    public static List<Class> scannerAllController(Class initClass){
-        ArrayList<Class> res = new ArrayList<>();
+    public static List<JuzcarClass> scannerAllController(Class initClass){
+        ArrayList<JuzcarClass> res = new ArrayList<>();
         scanPackage(initClass.getPackage().getName(), new IWhat() {
             @Override
             public void execute(File file, Class<?> clazz) {
                 Annotation[] annotations = clazz.getAnnotations();
                 for (Annotation an : annotations){
-                    if (an.annotationType().getName().contains("org.springframework.stereotype.Controller")){
-                        res.add(clazz);
-                    }else if (an.annotationType().getName().contains("org.springframework.web.bind.annotation.RestController")){
-                        res.add(clazz);
+                    // 如果 Class 中包含了与 Controller 有关的 注解
+                    if (classAnnotaions.contains(an.annotationType().getName().toString())){
+                        res.add(new JuzcarClass(clazz, Arrays.asList(annotations)));
+                        break;
                     }
                 }
             }
@@ -66,7 +75,24 @@ public class PackageUtils {
         return res;
     }
 
-    private static void  fetchFileList(File dir,List<File> fileList){
+    /**
+     * 清除被 com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner 注解的 Class
+     * @param classList
+     * @return
+     */
+    public static List<JuzcarClass> removeTheIgnoreController(List<JuzcarClass> classList){
+        Iterator<JuzcarClass> iterator = classList.iterator();
+        JuzcarClass clazzTemp;
+        while (iterator.hasNext()){
+            clazzTemp = iterator.next();
+            if (clazzTemp.getAnnotationNames().contains("com.ericwyn.juzcar.annotations.JuzcarIgnoreScanner")){
+                iterator.remove();
+            }
+        }
+        return classList;
+    }
+
+    private static void fetchFileList(File dir,List<File> fileList){
         if(dir.isDirectory()){
             for(File f:dir.listFiles()){
                 fetchFileList(f,fileList);
