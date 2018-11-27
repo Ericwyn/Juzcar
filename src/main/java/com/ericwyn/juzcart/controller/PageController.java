@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Created by Ericwyn on 18-11-22.
  */
 @Controller
-@JuzcarIgnoreScanner
 public class PageController {
 
     @RequestMapping(value = "/page1",method = RequestMethod.GET)

@@ -6,6 +6,7 @@ import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -25,7 +26,9 @@ public class ApiAnalysis {
         }
     };
 
-
+    /**
+     * 对 org.springframework.web.bind.annotation.RequestMapping 注解的分析回调
+     */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_RequestMapping = new ApiAnalysisCb() {
         @Override
         public JuzcarApi analysis(Method method, Annotation annotation) {
@@ -49,7 +52,20 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                api.setUrl(paths);
+                // 先获取所在 Controller 的 RequestMapping 里面的 path
+                String[] controllerURLs = getControllerURLFromMethod(method);
+                if (null != controllerURLs && controllerURLs.length != 0){
+                    String[] absolutePath = new String[controllerURLs.length * paths.length];
+                    int i=0;
+                    for (String controllerUrl : controllerURLs){
+                        for (String methodUrl : paths){
+                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
+                        }
+                    }
+                    api.setUrl(absolutePath);
+                }else {
+                    api.setUrl(paths);
+                }
                 // 设置 api 支持的方法
                 String[] apiMethods = new String[methods.length];
                 for(int i = 0; i < methods.length; i++){
@@ -57,7 +73,7 @@ public class ApiAnalysis {
                 }
                 api.setMethod(apiMethods);
                 // 设置 api 需要的参数
-                getParameFromMethodToApi(method, api);
+                getParamFromMethodToApi(method, api);
 
                 return api;
             } catch (Exception e) {
@@ -67,13 +83,16 @@ public class ApiAnalysis {
         }
     };
 
+    /**
+     * 对 org.springframework.web.bind.annotation.PostMapping 注解的分析回调
+     */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_PostMapping = new ApiAnalysisCb() {
         @Override
         public JuzcarApi analysis(Method method, Annotation annotation) {
             try {
                 JuzcarApi api = new JuzcarApi();
 
-                // 分析 org.springframework.web.bind.annotation.RequestMapping 的方法
+                // 分析 org.springframework.web.bind.annotation.PostMapping 的方法
                 Method Params = annotation.annotationType().getMethod("params");
                 Method headers = annotation.annotationType().getMethod("headers");
                 Method consumes = annotation.annotationType().getMethod("consumes");
@@ -88,11 +107,24 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                api.setUrl(paths);
+                // 先获取所在 Controller 的 RequestMapping 里面的 path
+                String[] controllerURLs = getControllerURLFromMethod(method);
+                if (null != controllerURLs && controllerURLs.length != 0){
+                    String[] absolutePath = new String[controllerURLs.length * paths.length];
+                    int i=0;
+                    for (String controllerUrl : controllerURLs){
+                        for (String methodUrl : paths){
+                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
+                        }
+                    }
+                    api.setUrl(absolutePath);
+                }else {
+                    api.setUrl(paths);
+                }
                 // 设置 api 支持的方法
                 api.setMethod(new String[]{"POST"});
                 // 获取原本 api 中的参数，用以分析 api 需要的参数
-                getParameFromMethodToApi(method, api);
+                getParamFromMethodToApi(method, api);
 
                 return api;
             } catch (Exception e) {
@@ -102,13 +134,16 @@ public class ApiAnalysis {
         }
     };
 
+    /**
+     * 对 org.springframework.web.bind.annotation.GetMapping 注解的分析回调
+     */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_GetMapping = new ApiAnalysisCb() {
         @Override
         public JuzcarApi analysis(Method method, Annotation annotation) {
             try {
                 JuzcarApi api = new JuzcarApi();
 
-                // 分析 org.springframework.web.bind.annotation.RequestMapping 的方法
+                // 分析 org.springframework.web.bind.annotation.GetMapping 的方法
                 Method Params = annotation.annotationType().getMethod("params");
                 Method headers = annotation.annotationType().getMethod("headers");
                 Method consumes = annotation.annotationType().getMethod("consumes");
@@ -123,11 +158,24 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                api.setUrl(paths);
+                // 先获取所在 Controller 的 RequestMapping 里面的 path
+                String[] controllerURLs = getControllerURLFromMethod(method);
+                if (null != controllerURLs && controllerURLs.length != 0){
+                    String[] absolutePath = new String[controllerURLs.length * paths.length];
+                    int i=0;
+                    for (String controllerUrl : controllerURLs){
+                        for (String methodUrl : paths){
+                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
+                        }
+                    }
+                    api.setUrl(absolutePath);
+                }else {
+                    api.setUrl(paths);
+                }
                 // 设置 api 支持的方法
                 api.setMethod(new String[]{"GET"});
                 // 设置 api 需要的参数
-                getParameFromMethodToApi(method, api);
+                getParamFromMethodToApi(method, api);
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -136,7 +184,12 @@ public class ApiAnalysis {
         }
     };
 
-    private static void getParameFromMethodToApi(Method method, JuzcarApi api){
+    /**
+     * 从 Method 里面获取 Param 具体信息并且塞到 api 里面去
+     * @param method
+     * @param api
+     */
+    private static void getParamFromMethodToApi(Method method, JuzcarApi api){
         Parameter[] parameters = method.getParameters();
         for (Parameter parameter : parameters){
             Annotation[] annotations = parameter.getAnnotations();
@@ -153,4 +206,27 @@ public class ApiAnalysis {
         }
     }
 
+    /**
+     * 从一个 Controller 里面的 Method
+     * 获取原 Controller 可能存在的 RequestMapping 注解
+     *
+     * @param method
+     * @return 返回注解的具体 path
+     */
+    private static String[] getControllerURLFromMethod(Method method){
+        Class<?> controller = method.getDeclaringClass();
+        for (Annotation annotation : controller.getAnnotations()){
+            if (annotation.annotationType().getName().equals("org.springframework.web.bind.annotation.RequestMapping")){
+                Method getValue = null;
+                try {
+                    getValue = annotation.annotationType().getMethod("value");
+                    return (String[]) getValue.invoke(annotation);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                    return new String[]{};
+                }
+            }
+        }
+        return new String[]{};
+    }
 }

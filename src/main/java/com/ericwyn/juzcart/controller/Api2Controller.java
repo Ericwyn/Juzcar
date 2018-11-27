@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by Ericwyn on 18-11-22.
  */
 @RestController
+@JuzcarIgnoreScanner
 @RequestMapping(value = "/v1")
-public class ApiController {
+public class Api2Controller {
 
     @RequestMapping(value = "/api1",method = RequestMethod.POST)
     public String api1(){

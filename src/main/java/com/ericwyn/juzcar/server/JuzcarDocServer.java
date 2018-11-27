@@ -39,6 +39,7 @@ public class JuzcarDocServer {
                 .setServerPort(9696)
                 .addHandleMethod(getApiJsonMethod)
                 .setWebRoot("/media/ericwyn/Work/Chaos/IntiliJ_Java_Project/juzcart/src/main/java/com/ericwyn/juzcar/server/webRoot")
+                .allowDebug()
                 .build();
         server.start();
     }
