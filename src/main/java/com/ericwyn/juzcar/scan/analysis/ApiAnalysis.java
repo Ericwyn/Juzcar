@@ -1,7 +1,9 @@
 package com.ericwyn.juzcar.scan.analysis;
 
+import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
+import com.ericwyn.juzcar.scan.obj.ApiType;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
@@ -22,7 +24,7 @@ public class ApiAnalysis {
     public static HashMap<String, ParamAnalysisCb> parameAnalysisMap = new HashMap<String, ParamAnalysisCb>(){
         {
             // 分析被 RequestParam 标记的方法参数
-            put("org.springframework.web.bind.annotation.RequestParam", ParamAnalysis.org_springframework_web_bind_annotation_RequestParam);
+            put(PackageName.RequestParam, ParamAnalysis.org_springframework_web_bind_annotation_RequestParam);
         }
     };
 
@@ -216,7 +218,7 @@ public class ApiAnalysis {
     private static String[] getControllerURLFromMethod(Method method){
         Class<?> controller = method.getDeclaringClass();
         for (Annotation annotation : controller.getAnnotations()){
-            if (annotation.annotationType().getName().equals("org.springframework.web.bind.annotation.RequestMapping")){
+            if (annotation.annotationType().getName().equals(PackageName.RequestMapping)){
                 Method getValue = null;
                 try {
                     getValue = annotation.annotationType().getMethod("value");
@@ -228,5 +230,25 @@ public class ApiAnalysis {
             }
         }
         return new String[]{};
+    }
+
+    private static ApiType getApiType(Method method){
+        // 如果该方法有 ResponseBody 注解，那么类型一定是 ApiType.JSON 或者 ApiType.XML
+        Annotation[] annotations = method.getAnnotations();
+        for (Annotation annotation : annotations){
+            if (annotation.annotationType().getName().equals(PackageName.ResponseBody)){
+                // TODO 判断到底是 JSON 还是 XML
+                return ApiType.JSON;
+            }
+        }
+        // 获取类所在的 Controller 的 Controller 注解类型
+        // TODO 这里效率不高，因为调用 getControllerURLFromMethod 又重复的获取了一次 declaringClass
+        Class<?> controller = method.getDeclaringClass();
+        for (Annotation annotation : controller.getAnnotations()){
+            if (annotation.annotationType().getName().equals(PackageName.Controller)){
+                return null;
+            }
+        }
+        return null;
     }
 }

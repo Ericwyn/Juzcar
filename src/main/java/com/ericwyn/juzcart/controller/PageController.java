@@ -1,10 +1,9 @@
 package com.ericwyn.juzcart.controller;
 
-import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -19,5 +18,12 @@ public class PageController {
     public String api1(){
         return "index";
     }
+
+    @RequestMapping(value = "/page1",method = RequestMethod.GET)
+    @ResponseBody
+    public String api2(){
+        return "json-data";
+    }
+
 
 }

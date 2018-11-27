@@ -1,5 +1,6 @@
 package com.ericwyn.juzcar.scan;
 
+import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.analysis.ApiAnalysis;
 import com.ericwyn.juzcar.scan.cb.ScannerCallBack;
 import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
@@ -27,17 +28,17 @@ public class ScannerUtils {
 
     // 应该再写一层分析工具，分析工具是一个 Map<String, Fun> ，然后下面的这些 List，就是这些 Map 的 ketSet
     private static List<String> classAnnotaions = Arrays.asList(
-            "org.springframework.stereotype.Controller",
-            "org.springframework.web.bind.annotation.RestController"
+            PackageName.Controller,
+            PackageName.RestController
     );
 
     // 创建一个 回调方法的 map 用来对包含特定注解的 Map 进行处理
     // 因为要确保对 Spring 框架无依赖，所以这里对注解的处理不能直接将注解转换成已有注解类，而只能通过反射获取注解的get方法，再获取值
     private static HashMap<String, ApiAnalysisCb>  apiAnalysisMap = new HashMap<String, ApiAnalysisCb>(){
         {
-            put("org.springframework.web.bind.annotation.RequestMapping", ApiAnalysis.org_springframework_web_bind_annotation_RequestMapping);
-            put("org.springframework.web.bind.annotation.PostMapping", ApiAnalysis.org_springframework_web_bind_annotation_PostMapping);
-            put("org.springframework.web.bind.annotation.GetMapping", ApiAnalysis.org_springframework_web_bind_annotation_GetMapping);
+            put(PackageName.RequestMapping, ApiAnalysis.org_springframework_web_bind_annotation_RequestMapping);
+            put(PackageName.PostMapping, ApiAnalysis.org_springframework_web_bind_annotation_PostMapping);
+            put(PackageName.GetMapping, ApiAnalysis.org_springframework_web_bind_annotation_GetMapping);
         }
     };
 
@@ -107,7 +108,7 @@ public class ScannerUtils {
         JuzcarClass clazzTemp;
         while (iterator.hasNext()){
             clazzTemp = iterator.next();
-            if (clazzTemp.getAnnotationMap().keySet().contains("com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner")){
+            if (clazzTemp.getAnnotationMap().keySet().contains(JuzcarIgnoreScanner.class.getName())){
                 iterator.remove();
             }
         }

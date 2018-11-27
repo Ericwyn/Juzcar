@@ -1,9 +1,11 @@
 package com.ericwyn.juzcart.controller;
 
 import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
+import com.ericwyn.juzcart.pojo.People;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +42,11 @@ public class ApiController {
     @GetMapping(value = "/api4")
     public String api4(@RequestParam("p1") Integer p1,
                        @RequestParam("p2") String p2){
+        return "HelloWorld";
+    }
+
+    @RequestMapping(value = "/api5")
+    public String api5(@RequestBody People people){
         return "HelloWorld";
     }
 
