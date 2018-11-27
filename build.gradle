@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+//编译JAVA文件时采用UTF-8
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+jar {
+    baseName = 'Juzcar'
+    version = 'beta'
+}
+
+
+repositories{
+    mavenLocal()   //使用 mavenLocal() 时，gradle 会查找 Maven 配置文件${user.home}/.m2/settings.xml
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    implementation 'com.github.Ericwyn:Ezerver:908005cc75'
+    // https://mvnrepository.com/artifact/com.alibaba/fastjson
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.53'
+
+}
