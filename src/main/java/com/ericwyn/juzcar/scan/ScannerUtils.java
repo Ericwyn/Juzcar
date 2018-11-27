@@ -2,7 +2,7 @@ package com.ericwyn.juzcar.scan;
 
 import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.analysis.ApiAnalysis;
-import com.ericwyn.juzcar.scan.cb.ScannerCallBack;
+import com.ericwyn.juzcar.scan.cb.PackageScannerCb;
 import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
@@ -46,7 +46,7 @@ public class ScannerUtils {
 
 
     // 包扫描
-    private static void scanPackage(String iPackage, ScannerCallBack callback){
+    private static void scanPackage(String iPackage, PackageScannerCb callback){
         String path = iPackage.replace(".","/");
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         try {
@@ -89,7 +89,7 @@ public class ScannerUtils {
      */
     public static List<JuzcarClass> scannerAllController(Class initClass){
         ArrayList<JuzcarClass> res = new ArrayList<>();
-        scanPackage(initClass.getPackage().getName(), new ScannerCallBack() {
+        scanPackage(initClass.getPackage().getName(), new PackageScannerCb() {
             @Override
             public void callback(File file, Class<?> clazz) {
                 Annotation[] annotations = clazz.getAnnotations();

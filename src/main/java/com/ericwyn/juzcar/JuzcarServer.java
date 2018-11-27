@@ -3,6 +3,7 @@ package com.ericwyn.juzcar;
 import com.alibaba.fastjson.JSONObject;
 import com.ericwyn.ezerver.expection.WebServerException;
 import com.ericwyn.juzcar.scan.ScannerUtils;
+import com.ericwyn.juzcar.scan.cb.JuzcarScannerCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarClass;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
@@ -23,6 +24,10 @@ import java.util.List;
 public class JuzcarServer {
     private static Class initClass;
 
+    private static HashMap<String, List<JuzcarApi>> apis;
+
+    private static JuzcarScannerCb scannerCb;
+
     private static Runnable juzcarRunnable = new Runnable() {
         @Override
         public void run() {
@@ -40,8 +45,11 @@ public class JuzcarServer {
 //            } catch (WebServerException e) {
 //                e.printStackTrace();
 //            }
-            System.out.println(JSONObject.toJSONString(apis));
-            System.out.println(juzcarClasses.size());
+            JuzcarServer.apis = apis;
+//            System.out.println(JSONObject.toJSONString(apis));
+//            System.out.println(juzcarClasses.size());
+            scannerCb.callback(apis);
+
 
             // TODO server模块，静态页面存储问题
             // TODO Json 模块导入问题
@@ -51,8 +59,13 @@ public class JuzcarServer {
         }
     };
 
-    public static void run(Class initClass){
+    public static void run(Class initClass, JuzcarScannerCb juzcarScanner){
         JuzcarServer.initClass = initClass;
+        JuzcarServer.scannerCb = juzcarScanner;
         new Thread(juzcarRunnable).run();
+    }
+
+    public static HashMap<String, List<JuzcarApi>> getApis() {
+        return apis;
     }
 }
