@@ -27,6 +27,8 @@ public class ApiAnalysis {
         {
             // 分析被 RequestParam 标记的方法参数
             put(PackageName.RequestParam, ParamAnalysis.org_springframework_web_bind_annotation_RequestParam);
+            put(PackageName.RequestBody, ParamAnalysis.org_springframework_web_bind_annotation_RequestBody);
+
         }
     };
 
@@ -188,8 +190,13 @@ public class ApiAnalysis {
                 parameAnalysis = parameAnalysisMap.get(analysisKey);
                 // 参数的注解
                 if (parameAnalysis != null){
-                    JuzcarParam param = parameAnalysis.analysis(parameter, an);
-                    res.add(param);
+                    // 对 @RequestParam 注解的解析
+                    res.add(parameAnalysis.analysis(parameter, an));
+                    // 对 @RequestBody 注解的解析
+                    List<JuzcarParam> paramsFromRequestBody = parameAnalysis.analysisBody(parameter, an);
+                    if (null != paramsFromRequestBody && paramsFromRequestBody.size() != 0){
+                        res.addAll(paramsFromRequestBody);
+                    }
                 }
             }
         }

@@ -43,7 +43,7 @@ public class JuzcarServer {
 
             // TODO server模块，静态页面存储问题
             // TODO Json 模块导入问题
-            // TODO 对 Controller 和 RestController 的分别判断问题
+            // 对 Controller 和 RestController 的分别判断问题
             // TODO 对 RequestBody 和 ResponseBody 的支持
             // TODO 如果交流的方式并非 JSON 而是 XML ？（暂时不考虑支持 xml 了
         }
