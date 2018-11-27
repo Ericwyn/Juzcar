@@ -1,5 +1,6 @@
 package com.ericwyn.juzcar;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ericwyn.ezerver.expection.WebServerException;
 import com.ericwyn.juzcar.scan.ScannerUtils;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
@@ -34,11 +35,12 @@ public class JuzcarServer {
             // 针对方法扫描出具体的 API
             HashMap<String, List<JuzcarApi>> apis = ScannerUtils.scannerAPI(juzcarMethodMap);
             // server 模块
-            try {
-                new JuzcarDocServer(apis).startServer();
-            } catch (WebServerException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                new JuzcarDocServer(apis).startServer();
+//            } catch (WebServerException e) {
+//                e.printStackTrace();
+//            }
+            System.out.println(JSONObject.toJSONString(apis));
             System.out.println(juzcarClasses.size());
 
             // TODO server模块，静态页面存储问题

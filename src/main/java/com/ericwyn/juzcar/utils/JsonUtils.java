@@ -1,17 +1,17 @@
-//package com.ericwyn.juzcar.utils;
-//
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.SerializationFeature;
-//
-//import java.text.SimpleDateFormat;
-//
-///**
-// *
-// * Json 处理工具，底层调用了 Jackson
-// *
-// * Created by Ericwyn on 18-11-26.
-// */
-//public class JsonUtils {
+package com.ericwyn.juzcar.utils;
+
+
+import com.sun.xml.internal.ws.developer.SerializationFeature;
+
+import java.text.SimpleDateFormat;
+
+/**
+ *
+ * Json 处理工具，底层调用了 Jackson
+ *
+ * Created by Ericwyn on 18-11-26.
+ */
+public class JsonUtils {
 //    private static ObjectMapper mapper;
 //    public static ObjectMapper getMapper(){
 //        if (null == mapper){
@@ -30,5 +30,7 @@
 //        }
 //        return mapper;
 //    }
-//
-//}
+    public static void test(){
+//        JsonOb
+    }
+}
