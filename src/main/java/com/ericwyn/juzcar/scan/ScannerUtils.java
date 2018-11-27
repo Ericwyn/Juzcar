@@ -52,6 +52,11 @@ public class ScannerUtils {
         try {
             // 这里确认 url 是一个文件的位置
             if (url.toString().startsWith("file")){
+                System.out.println(url.toString());
+                System.out.println(path);
+                System.out.println(url.toString().indexOf(path));
+                int packageNameStart = url.toString().indexOf(path);
+                System.out.println(url.toString().substring(url.toString().indexOf(path)));
                 String filePath = URLDecoder.decode(url.getFile(),"utf-8");
                 File dir = new File(filePath);
                 List<File> fileList = new ArrayList<>();
@@ -61,7 +66,9 @@ public class ScannerUtils {
                     if(fileName.endsWith("class")){
                         // 文件名一般为 /media/ericwyn/Work/Chaos/IntiliJ_Java_Project/juzcart/target/classes/com/ericwyn/juzcart/JuzcartApplication.class
                         // 找到 "classes" 的位置，这个 classes 后面第8个位置开始的后面的文件路径，就是包名字
-                        String nosuffixFileName = fileName.substring(8+fileName.lastIndexOf("classes"),fileName.indexOf(".class"));
+
+//                        String nosuffixFileName = fileName.substring(8+fileName.lastIndexOf("classes"),fileName.indexOf(".class"));
+                        String nosuffixFileName = ("file:"+fileName).substring(packageNameStart);
                         String filePackage = nosuffixFileName.replaceAll("/", ".");
                         Class<?> clazz = Class.forName(filePackage);
                         callback.callback(f,clazz);

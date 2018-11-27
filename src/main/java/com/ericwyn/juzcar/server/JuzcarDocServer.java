@@ -6,7 +6,7 @@ import com.ericwyn.ezerver.handle.HandleMethod;
 import com.ericwyn.ezerver.request.Request;
 import com.ericwyn.ezerver.response.Response;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
-import com.ericwyn.juzcar.utils.JsonUtils;
+//import com.ericwyn.juzcar.utils.JsonUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,8 +29,8 @@ public class JuzcarDocServer {
         HandleMethod getApiJsonMethod = new HandleMethod("/api") {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
-                String json = JsonUtils.getMapper().writeValueAsString(apiMaps);
-                response.sendJsonData(json);
+//                String json = JsonUtils.getMapper().writeValueAsString(apiMaps);
+//                response.sendJsonData(json);
                 response.closeStream();
             }
         };
