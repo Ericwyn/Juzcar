@@ -11,7 +11,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 存储各种对于被标记的 Method 的 Analysis
@@ -54,20 +56,7 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                // 先获取所在 Controller 的 RequestMapping 里面的 path
-                String[] controllerURLs = getControllerURLFromMethod(method);
-                if (null != controllerURLs && controllerURLs.length != 0){
-                    String[] absolutePath = new String[controllerURLs.length * paths.length];
-                    int i=0;
-                    for (String controllerUrl : controllerURLs){
-                        for (String methodUrl : paths){
-                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
-                        }
-                    }
-                    api.setUrl(absolutePath);
-                }else {
-                    api.setUrl(paths);
-                }
+                api.setUrl(getApiPath(method, paths));
                 // 设置 api 支持的方法
                 String[] apiMethods = new String[methods.length];
                 for(int i = 0; i < methods.length; i++){
@@ -75,8 +64,8 @@ public class ApiAnalysis {
                 }
                 api.setMethod(apiMethods);
                 // 设置 api 需要的参数
-                getParamFromMethodToApi(method, api);
-
+                api.setParams(getParamFromMethodToApi(method));
+                api.setType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -109,25 +98,12 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                // 先获取所在 Controller 的 RequestMapping 里面的 path
-                String[] controllerURLs = getControllerURLFromMethod(method);
-                if (null != controllerURLs && controllerURLs.length != 0){
-                    String[] absolutePath = new String[controllerURLs.length * paths.length];
-                    int i=0;
-                    for (String controllerUrl : controllerURLs){
-                        for (String methodUrl : paths){
-                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
-                        }
-                    }
-                    api.setUrl(absolutePath);
-                }else {
-                    api.setUrl(paths);
-                }
+                api.setUrl(getApiPath(method, paths));
                 // 设置 api 支持的方法
                 api.setMethod(new String[]{"POST"});
                 // 获取原本 api 中的参数，用以分析 api 需要的参数
-                getParamFromMethodToApi(method, api);
-
+                api.setParams(getParamFromMethodToApi(method));
+                api.setType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -160,24 +136,12 @@ public class ApiAnalysis {
                 // 设置 api 的 name
                 api.setName(name);
                 // 设置 api 的 url
-                // 先获取所在 Controller 的 RequestMapping 里面的 path
-                String[] controllerURLs = getControllerURLFromMethod(method);
-                if (null != controllerURLs && controllerURLs.length != 0){
-                    String[] absolutePath = new String[controllerURLs.length * paths.length];
-                    int i=0;
-                    for (String controllerUrl : controllerURLs){
-                        for (String methodUrl : paths){
-                            absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
-                        }
-                    }
-                    api.setUrl(absolutePath);
-                }else {
-                    api.setUrl(paths);
-                }
+                api.setUrl(getApiPath(method, paths));
                 // 设置 api 支持的方法
                 api.setMethod(new String[]{"GET"});
                 // 设置 api 需要的参数
-                getParamFromMethodToApi(method, api);
+                api.setParams(getParamFromMethodToApi(method));
+                api.setType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -187,12 +151,35 @@ public class ApiAnalysis {
     };
 
     /**
-     * 从 Method 里面获取 Param 具体信息并且塞到 api 里面去
+     * 获取 Api 的具体路径，包括对 Controller 里 RequestMapping 的分析
      * @param method
-     * @param api
+     * @param paths
+     * @return
      */
-    private static void getParamFromMethodToApi(Method method, JuzcarApi api){
+    private static String[] getApiPath(Method method, String[] paths){
+        // 先获取所在 Controller 的 RequestMapping 里面的 path
+        String[] controllerURLs = getControllerURLFromMethod(method);
+        if (null != controllerURLs && controllerURLs.length != 0){
+            String[] absolutePath = new String[controllerURLs.length * paths.length];
+            int i=0;
+            for (String controllerUrl : controllerURLs){
+                for (String methodUrl : paths){
+                    absolutePath[i++] = (controllerUrl+"/"+methodUrl).replaceAll("//","/");
+                }
+            }
+            return absolutePath;
+        }else {
+            return paths;
+        }
+    }
+
+    /**
+     * 从 Method 里面获取所有 Param 具体信息并且塞到 api 里面去
+     * @param method
+     */
+    private static List<JuzcarParam> getParamFromMethodToApi(Method method){
         Parameter[] parameters = method.getParameters();
+        List<JuzcarParam> res = new ArrayList<>();
         for (Parameter parameter : parameters){
             Annotation[] annotations = parameter.getAnnotations();
             ParamAnalysisCb parameAnalysis;
@@ -202,10 +189,11 @@ public class ApiAnalysis {
                 // 参数的注解
                 if (parameAnalysis != null){
                     JuzcarParam param = parameAnalysis.analysis(parameter, an);
-                    api.getParams().add(param);
+                    res.add(param);
                 }
             }
         }
+        return res;
     }
 
     /**
@@ -232,6 +220,11 @@ public class ApiAnalysis {
         return new String[]{};
     }
 
+    /**
+     * 获取 API 的类型
+     * @param method
+     * @return
+     */
     private static ApiType getApiType(Method method){
         // 如果该方法有 ResponseBody 注解，那么类型一定是 ApiType.JSON 或者 ApiType.XML
         Annotation[] annotations = method.getAnnotations();
@@ -246,9 +239,11 @@ public class ApiAnalysis {
         Class<?> controller = method.getDeclaringClass();
         for (Annotation annotation : controller.getAnnotations()){
             if (annotation.annotationType().getName().equals(PackageName.Controller)){
-                return null;
+                return ApiType.PAGE;
+            }else if (annotation.annotationType().getName().equals(PackageName.RestController)){
+                return ApiType.JSON;
             }
         }
-        return null;
+        return ApiType.UNKNOW;
     }
 }

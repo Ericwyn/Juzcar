@@ -19,7 +19,7 @@ public class PageController {
         return "index";
     }
 
-    @RequestMapping(value = "/page1",method = RequestMethod.GET)
+    @RequestMapping(value = "/page2",method = RequestMethod.GET)
     @ResponseBody
     public String api2(){
         return "json-data";

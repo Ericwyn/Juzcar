@@ -6,5 +6,6 @@ package com.ericwyn.juzcar.scan.obj;
 public enum ApiType {
     XML,
     JSON,
-    PAGE;
+    PAGE,
+    UNKNOW,
 }
