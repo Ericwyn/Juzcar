@@ -1,4 +1,7 @@
 # Juzcar
+
+[![](https://jitpack.io/v/Ericwyn/Juzcar.svg)](https://jitpack.io/#Ericwyn/Juzcar)
+
 RESTful API document auto-generation tools, depends on the Spring framework
 
 ## Feature
