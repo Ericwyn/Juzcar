@@ -8,4 +8,5 @@ public enum ApiType {
     JSON,
     PAGE,
     UNKNOW,
+    STRING,
 }
