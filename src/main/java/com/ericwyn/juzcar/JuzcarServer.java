@@ -40,11 +40,11 @@ public class JuzcarServer {
             // 针对方法扫描出具体的 API
             HashMap<String, List<JuzcarApi>> apis = ScannerUtils.scannerAPI(juzcarMethodMap);
             // server 模块
-//            try {
-//                new JuzcarDocServer(apis).startServer();
-//            } catch (WebServerException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                new JuzcarDocServer(apis).startServer();
+            } catch (WebServerException e) {
+                e.printStackTrace();
+            }
             JuzcarServer.apis = apis;
 //            System.out.println(JSONObject.toJSONString(apis));
 //            System.out.println(juzcarClasses.size());
