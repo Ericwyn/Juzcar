@@ -56,6 +56,8 @@ public class JuzcarServer {
             // 对 Controller 和 RestController 的分别判断问题
             // TODO 对 RequestBody 和 ResponseBody 的支持
             // TODO 如果交流的方式并非 JSON 而是 XML ？（暂时不考虑支持 xml 了
+            // TODO 增加一些注解能够强硬设置API 的信息，注解在方法，替换掉自动分析注解得到的 api 信息
+            // TODO 增加一个注解来设置 Controller 的名字，注解在类，避免 Controller 名字太长
         }
     };
 
