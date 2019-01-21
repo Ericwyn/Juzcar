@@ -10,7 +10,7 @@ import java.util.List;
  *      url         api 的 url，来自同上
  *      method      api 的 method，来自同上，或分析 PostMapping/GetMapping 获得
  *      params      api 的 params，来自 @RequestMapping 注解的 Method 里，那些被 @RequestParam 注解的参数的分析
- *      type        api 的类型，分为两类，JSON 或者 PAGE，分别对应的是返回 JSON 数据的接口或者返回页面的接口
+ *      returnType        api 的类型，分为两类，JSON 或者 PAGE，分别对应的是返回 JSON 数据的接口或者返回页面的接口
  *
  * Created by Ericwyn on 18-11-26.
  */
@@ -19,7 +19,7 @@ public class JuzcarApi {
     private String[] url;
     private String[] method;
     private List<JuzcarParam> params;
-    private ApiType type;
+    private ReturnType returnType;
 
     public JuzcarApi() {
 
@@ -60,11 +60,11 @@ public class JuzcarApi {
         this.params = params;
     }
 
-    public ApiType getType() {
-        return type;
+    public ReturnType getReturnType() {
+        return returnType;
     }
 
-    public void setType(ApiType type) {
-        this.type = type;
+    public void setReturnType(ReturnType returnType) {
+        this.returnType = returnType;
     }
 }

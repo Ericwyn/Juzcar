@@ -1,6 +1,6 @@
 package com.ericwyn.juzcar.scan.annotations;
 
-import com.ericwyn.juzcar.scan.obj.ApiType;
+import com.ericwyn.juzcar.scan.obj.ReturnType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -43,7 +43,7 @@ public @interface ParamFrom {
     // 来源的接口 url
     String path();
     // 来源接口的数据返回格式
-    ApiType type();
+    ReturnType type();
     // 提取格式
     String regex();
 }

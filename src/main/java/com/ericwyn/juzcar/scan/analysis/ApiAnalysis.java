@@ -3,7 +3,7 @@ package com.ericwyn.juzcar.scan.analysis;
 import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
-import com.ericwyn.juzcar.scan.obj.ApiType;
+import com.ericwyn.juzcar.scan.obj.ReturnType;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
@@ -67,7 +67,7 @@ public class ApiAnalysis {
                 api.setMethod(apiMethods);
                 // 设置 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
-                api.setType(getApiType(method));
+                api.setReturnType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -105,7 +105,7 @@ public class ApiAnalysis {
                 api.setMethod(new String[]{"POST"});
                 // 获取原本 api 中的参数，用以分析 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
-                api.setType(getApiType(method));
+                api.setReturnType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -143,7 +143,7 @@ public class ApiAnalysis {
                 api.setMethod(new String[]{"GET"});
                 // 设置 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
-                api.setType(getApiType(method));
+                api.setReturnType(getApiType(method));
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -232,13 +232,13 @@ public class ApiAnalysis {
      * @param method
      * @return
      */
-    private static ApiType getApiType(Method method){
+    private static ReturnType getApiType(Method method){
         // 如果该方法有 ResponseBody 注解，那么类型一定是 ApiType.JSON 或者 ApiType.XML
         Annotation[] annotations = method.getAnnotations();
         for (Annotation annotation : annotations){
             if (annotation.annotationType().getName().equals(PackageName.ResponseBody)){
                 // TODO 判断到底是 JSON 还是 XML
-                return ApiType.JSON;
+                return ReturnType.JSON;
             }
         }
         // 获取类所在的 Controller 的 Controller 注解类型
@@ -246,11 +246,11 @@ public class ApiAnalysis {
         Class<?> controller = method.getDeclaringClass();
         for (Annotation annotation : controller.getAnnotations()){
             if (annotation.annotationType().getName().equals(PackageName.Controller)){
-                return ApiType.PAGE;
+                return ReturnType.PAGE;
             }else if (annotation.annotationType().getName().equals(PackageName.RestController)){
-                return ApiType.JSON;
+                return ReturnType.JSON;
             }
         }
-        return ApiType.UNKNOW;
+        return ReturnType.UNKNOW;
     }
 }
