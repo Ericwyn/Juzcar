@@ -33,16 +33,30 @@ public class JuzcarDocServer {
         }
     }
 
-    public void startServer() throws WebServerException {
+//    public void startServer() throws WebServerException {
+//        ApiHandle apiHandle = new ApiHandle();
+//
+//        SimpleHttpServer server = new SimpleHttpServer.Builder()
+//                .setServerPort(9696)
+//                .addHandleMethod(apiHandle.apiJsonHandle(apiMaps))
+//                .setWebRoot(".juzcar/static")
+//                .allowDebug()
+//                .build();
+//        server.start();
+//    }
+
+    public void startServer(int httpPort, boolean allowDebug) throws WebServerException {
         ApiHandle apiHandle = new ApiHandle();
 
-        SimpleHttpServer server = new SimpleHttpServer.Builder()
-                .setServerPort(9696)
+
+        SimpleHttpServer.Builder builder = new SimpleHttpServer.Builder()
+                .setServerPort(httpPort)
                 .addHandleMethod(apiHandle.apiJsonHandle(apiMaps))
-                .setWebRoot(".juzcar/static")
-                .allowDebug()
-                .build();
-        server.start();
+                .setWebRoot(".juzcar/static");
+        if (allowDebug){
+            builder.allowDebug();
+        }
+        builder.build().start();
     }
 
     // 将打包得到的 jar 里面的 static 文件夹，复制到 .juzcar 文件夹里面，以此获得 WEBROOT
