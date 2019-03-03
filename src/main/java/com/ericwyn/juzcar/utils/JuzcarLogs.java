@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by Ericwyn on 19-3-3.
  */
-public class LogUtils {
+public class JuzcarLogs {
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private static enum Level{
