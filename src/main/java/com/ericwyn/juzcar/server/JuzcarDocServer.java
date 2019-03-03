@@ -3,6 +3,7 @@ package com.ericwyn.juzcar.server;
 import com.ericwyn.ezerver.SimpleHttpServer;
 import com.ericwyn.ezerver.expection.WebServerException;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.server.handle.ApiHandle;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,9 +21,9 @@ import java.util.jar.JarFile;
  */
 public class JuzcarDocServer {
 
-    private Map<String, List<JuzcarApi>> apiMaps;
+    private Map<String, JuzcarApiList> apiMaps;
 
-    public JuzcarDocServer(Map<String, List<JuzcarApi>> apiMaps) {
+    public JuzcarDocServer(Map<String, JuzcarApiList> apiMaps) {
         this.apiMaps = apiMaps;
         // 配置静态资源文件夹，将 jar 里面的静态资源文件复制出来，复制到 .juzcar 当中
         try {

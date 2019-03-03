@@ -4,8 +4,10 @@ import com.ericwyn.ezerver.expection.WebServerException;
 import com.ericwyn.juzcar.scan.ScannerUtils;
 import com.ericwyn.juzcar.scan.cb.JuzcarScannerCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.scan.obj.JuzcarClass;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
+import com.ericwyn.juzcar.scan.obj.JuzcarMethodList;
 import com.ericwyn.juzcar.server.JuzcarDocServer;
 import com.ericwyn.juzcar.utils.JuzcarLogs;
 
@@ -24,7 +26,7 @@ import java.util.List;
 public class JuzcarServer {
     private static Class initClass;
 
-    private static HashMap<String, List<JuzcarApi>> apis;
+    private static HashMap<String, JuzcarApiList> apis;
 
     private static JuzcarScannerCb scannerCb;
 
@@ -36,19 +38,19 @@ public class JuzcarServer {
             // 确定类当中哪些是真的要扫描的（去掉被 Ignore 注解的类）
             ScannerUtils.removeTheIgnoreController(juzcarClasses);
             // 以 Controller 名称分组，扫描其中的方法
-            HashMap<String, List<JuzcarMethod>> juzcarMethodMap = ScannerUtils.scannerMethods(juzcarClasses);
+            HashMap<String, JuzcarMethodList> juzcarMethodListMap = ScannerUtils.scannerMethods(juzcarClasses);
             // 针对方法扫描出具体的 API
-            HashMap<String, List<JuzcarApi>> apis = ScannerUtils.scannerAPI(juzcarMethodMap);
+            HashMap<String, JuzcarApiList> apis = ScannerUtils.scannerAPI(juzcarMethodListMap);
             // server 模块
             try {
-                new JuzcarDocServer(apis).startServer();
+                new JuzcarDocServer(JuzcarServer.apis).startServer();
             } catch (WebServerException e) {
                 e.printStackTrace();
             }
             JuzcarServer.apis = apis;
 //            System.out.println(JSONObject.toJSONString(apis));
 //            System.out.println(juzcarClasses.size());
-            scannerCb.callback(apis);
+            scannerCb.callback(JuzcarServer.apis);
 
 
             // TODO server模块，静态页面存储问题
@@ -91,14 +93,14 @@ public class JuzcarServer {
      */
     private static JuzcarScannerCb defaultScannerCb = new JuzcarScannerCb() {
         @Override
-        public void callback(HashMap<String, List<JuzcarApi>> apis) {
+        public void callback(HashMap<String, JuzcarApiList> apis) {
             for (String key : apis.keySet()){
-                JuzcarLogs.SOUT("扫描 "+ key+" 得到 "+apis.get(key).size()+" 接口");
+                JuzcarLogs.SOUT("扫描 "+ key+" 得到 "+apis.get(key).getApis().size()+" 个接口");
             }
         }
     };
 
-    public static HashMap<String, List<JuzcarApi>> getApis() {
+    public static HashMap<String, JuzcarApiList> getApis() {
         return apis;
     }
 }

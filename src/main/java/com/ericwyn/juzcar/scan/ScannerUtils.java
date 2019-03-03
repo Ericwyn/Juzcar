@@ -8,8 +8,10 @@ import com.ericwyn.juzcar.scan.cb.PackageScannerCb;
 import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.scan.obj.JuzcarClass;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
+import com.ericwyn.juzcar.scan.obj.JuzcarMethodList;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -148,8 +150,10 @@ public class ScannerUtils {
      * @param classList
      * @return
      */
-    public static HashMap<String,List<JuzcarMethod>> scannerMethods(List<JuzcarClass> classList){
-        HashMap<String, List<JuzcarMethod>> methodMap = new HashMap<>();
+    public static HashMap<String, JuzcarMethodList> scannerMethods(List<JuzcarClass> classList){
+
+        HashMap<String, JuzcarMethodList> methodMap = new HashMap<>();
+        JuzcarMethodList juzcarMethodListTemp;
         for (JuzcarClass juzcarClass : classList){
             Class clazz = juzcarClass.getClazz();
             String key = clazz.getName();
@@ -180,7 +184,10 @@ public class ScannerUtils {
                     methodList.add(juzcarMethod);
                 }
             }
-            methodMap.put(key,methodList);
+            juzcarMethodListTemp = new JuzcarMethodList();
+            juzcarMethodListTemp.setClazz(juzcarClass);
+            juzcarMethodListTemp.setMethods(methodList);
+            methodMap.put(key,juzcarMethodListTemp);
         }
         return methodMap;
     }
@@ -191,11 +198,14 @@ public class ScannerUtils {
      * @param methodMap
      * @return
      */
-    public static HashMap<String, List<JuzcarApi>> scannerAPI(HashMap<String, List<JuzcarMethod>> methodMap){
-        HashMap<String, List<JuzcarApi>> apiMap = new HashMap<>();
+    public static HashMap<String, JuzcarApiList> scannerAPI(HashMap<String, JuzcarMethodList> methodMap){
+        HashMap<String, JuzcarApiList> apiMap = new HashMap<>();
+        JuzcarApiList juzcarApiList;
+        JuzcarMethodList methodListTemp;
         for (String packageName : methodMap.keySet()){
+            methodListTemp = methodMap.get(packageName);
             List<JuzcarApi> apiList = new ArrayList<>();
-            List<JuzcarMethod> methodList = methodMap.get(packageName);
+            List<JuzcarMethod> methodList = methodListTemp.getMethods();
             for (JuzcarMethod method : methodList){
                 // 分析 method 里面的注解，对 Api 注解进行分析并且返回 JuzcarApi 对象，将 Method 的注解变成一个个 API
                 for (String anName : method.getAnnotationMap().keySet()){
@@ -208,7 +218,10 @@ public class ScannerUtils {
                     }
                 }
             }
-            apiMap.put(packageName, apiList);
+            juzcarApiList = new JuzcarApiList();
+            juzcarApiList.setApis(apiList);
+            juzcarApiList.setMethods(methodListTemp);
+            apiMap.put(packageName, juzcarApiList);
         }
         return apiMap;
     }
