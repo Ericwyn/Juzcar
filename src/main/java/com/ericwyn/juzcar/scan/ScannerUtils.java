@@ -2,6 +2,8 @@ package com.ericwyn.juzcar.scan;
 
 import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.analysis.ApiAnalysis;
+import com.ericwyn.juzcar.scan.annotations.JuzcarClassNote;
+import com.ericwyn.juzcar.scan.annotations.JuzcarMethodNote;
 import com.ericwyn.juzcar.scan.cb.PackageScannerCb;
 import com.ericwyn.juzcar.scan.annotations.JuzcarIgnoreScanner;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
@@ -27,7 +29,7 @@ import java.util.Set;
 public class ScannerUtils {
 
     // 应该再写一层分析工具，分析工具是一个 Map<String, Fun> ，然后下面的这些 List，就是这些 Map 的 ketSet
-    private static List<String> classAnnotaions = Arrays.asList(
+    private static List<String> shouldAnalysisClass = Arrays.asList(
             PackageName.Controller,
             PackageName.RestController
     );
@@ -45,7 +47,11 @@ public class ScannerUtils {
     private static Set<String> methodAnnotaions = apiAnalysisMap.keySet();
 
 
-    // 包扫描
+    /**
+     * 扫描 package 的方法，
+     * @param iPackage  第一个 package 是包的名称
+     * @param callback  callBack 处理扫描得到的(类文件名，类文件 Class)
+     */
     private static void scanPackage(String iPackage, PackageScannerCb callback){
         String path = iPackage.replace(".","/");
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
@@ -69,8 +75,10 @@ public class ScannerUtils {
                         String nosuffixFileName = fileUrl.substring(packageNameStart, fileUrl.length()-6);
                         String filePackage = nosuffixFileName.replaceAll("/", ".");
                         Class<?> clazz = Class.forName(filePackage);
+                        // 扫描得到了 Class 之后
                         callback.callback(f,clazz);
                     }else {
+                        // 扫描的是非 Class
                         callback.callback(f,null);
                     }
                 }
@@ -82,21 +90,36 @@ public class ScannerUtils {
 
     /**
      * 获取工程当中所有的 Controller ，包括 RestController
+     * scanPackage 的话是扫描这个package 里面所有的类， CB 的话负责对每个类具体的处理
+     *
+     * PackageScannerCb 的第一个参数是这个 class 的文件，第二个参数是这个类的具体 Class
      * @param initClass
      * @return
      */
     public static List<JuzcarClass> scannerAllController(Class initClass){
         ArrayList<JuzcarClass> res = new ArrayList<>();
+        // 下面的代码相当于一个 for 循环
+        // 循环这个 initClass 所在的 package 及其子目录的 package
+        // 得到一个 class 之后就对其进行 CB 当中的处理
         scanPackage(initClass.getPackage().getName(), new PackageScannerCb() {
             @Override
             public void callback(File file, Class<?> clazz) {
                 Annotation[] annotations = clazz.getAnnotations();
+                boolean isJuzcarClassFlag = false;
+                String juzcarClassNote = "";
+
                 for (Annotation an : annotations){
                     // 如果 Class 中包含了与 Controller 有关的 注解
-                    if (classAnnotaions.contains(an.annotationType().getName())){
-                        res.add(new JuzcarClass(clazz, annotations));
-                        break;
+                    if (shouldAnalysisClass.contains(an.annotationType().getName())){
+                       isJuzcarClassFlag = true;
                     }
+                    // 获取备注的值
+                    if (an instanceof JuzcarClassNote){
+                        juzcarClassNote = ((JuzcarClassNote) an).value();
+                    }
+                }
+                if (isJuzcarClassFlag){
+                    res.add(new JuzcarClass(clazz, annotations, juzcarClassNote));
                 }
             }
         });
@@ -137,6 +160,8 @@ public class ScannerUtils {
                 boolean scannerFlag = false;
                 boolean ignoreFlag = false;
                 Annotation[] annotations = method.getAnnotations();
+
+                String juzcarMethodNote = "";
                 for (Annotation an : annotations){
                     if (methodAnnotaions.contains(an.annotationType().getName())){
                         scannerFlag = true;
@@ -144,10 +169,14 @@ public class ScannerUtils {
                     if (an.annotationType().getName().equals(JuzcarIgnoreScanner.class.getName())){
                         ignoreFlag = true;
                     }
+                    // 获取备注的值
+                    if (an instanceof JuzcarMethodNote){
+                        juzcarMethodNote = ((JuzcarMethodNote)an).value();
+                    }
                 }
                 // 既含有需要被扫描的 flag 又不被 Ignore 标记
                 if (scannerFlag && !ignoreFlag){
-                    JuzcarMethod juzcarMethod = new JuzcarMethod(method,method.getAnnotations());
+                    JuzcarMethod juzcarMethod = new JuzcarMethod(method,method.getAnnotations(), juzcarMethodNote);
                     methodList.add(juzcarMethod);
                 }
             }

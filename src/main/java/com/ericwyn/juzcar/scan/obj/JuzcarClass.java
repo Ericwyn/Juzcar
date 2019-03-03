@@ -13,16 +13,19 @@ import java.util.Map;
 public class JuzcarClass {
     private Class clazz;
     private Map<String, Annotation> annotationMap;
+    private String note;
+
 
     public JuzcarClass() {
     }
 
-    public JuzcarClass(Class clazz, Annotation[] annotations) {
+    public JuzcarClass(Class clazz, Annotation[] annotations, String note) {
         this.clazz = clazz;
         annotationMap = new HashMap<>();
         for (Annotation an : annotations){
             annotationMap.put(an.annotationType().getName(), an);
         }
+        this.note = note;
     }
 
     public Class getClazz() {
@@ -31,5 +34,9 @@ public class JuzcarClass {
 
     public Map<String, Annotation> getAnnotationMap() {
         return annotationMap;
+    }
+
+    public String getNote() {
+        return note;
     }
 }

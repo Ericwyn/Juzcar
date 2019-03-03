@@ -11,11 +11,12 @@ import java.util.Map;
 public class JuzcarMethod {
     private Method method;
     private Map<String, Annotation> annotationMap;
+    private String note;
 
     public JuzcarMethod(){
     }
 
-    public JuzcarMethod(Method method, Annotation[] annotations) {
+    public JuzcarMethod(Method method, Annotation[] annotations, String note) {
         this.method = method;
         annotationMap = new HashMap<>();
         for (Annotation an : annotations){
@@ -31,4 +32,7 @@ public class JuzcarMethod {
         return annotationMap;
     }
 
+    public String getNote() {
+        return note;
+    }
 }
