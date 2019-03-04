@@ -194,6 +194,7 @@ public class Response {
      * @throws IOException
      */
     private void sendResponseBody(String bodyStr) throws IOException {
+        output.write(("\n").getBytes());
         output.write(bodyStr.getBytes());
     }
 
