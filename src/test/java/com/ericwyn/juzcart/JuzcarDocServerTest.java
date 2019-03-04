@@ -54,9 +54,9 @@ public class JuzcarDocServerTest {
             apiList.add(api);
         }
         apiMaps.put("cccController", apiList);
-
-        JuzcarDocServer server = new JuzcarDocServer(apiMaps);
-        server.startServer();
+//
+//        JuzcarDocServer server = new JuzcarDocServer(apiMaps);
+//        server.startServer();
     }
 
 }

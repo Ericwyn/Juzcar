@@ -88,6 +88,7 @@
         function (resp) {
             let json = JSON.parse(resp);
             apiData = json;
+            // console.log(apiData);
             initPage(apiData);
         },
         function (status) {

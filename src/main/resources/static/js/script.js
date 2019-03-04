@@ -30,7 +30,7 @@ function loadNavation(domName, isOpen, jsonData) {
 
 // 载入一个页面
 function loadPage(key, apiData) {
-    let apiList = apiData[key];
+    let apiList = apiData[key]['apis'];
     domId("apiContainer").innerHTML = "";
     apiList.forEach(function (apiItem) {
         domId("apiContainer").innerHTML += loadApi(apiItem);
