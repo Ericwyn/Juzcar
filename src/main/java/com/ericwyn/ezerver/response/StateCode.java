@@ -7,7 +7,9 @@ package com.ericwyn.ezerver.response;
  */
 public enum StateCode {
     CODE_404 ("404 File Not Found "),
-    CODE_200 ("200 OK ");
+    CODE_200 ("200 OK "),
+    CODE_301 ("301 Moved Permanently"),
+    CODE_302 ("302");
 
     private final String code;
 

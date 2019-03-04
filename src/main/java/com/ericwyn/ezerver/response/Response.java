@@ -145,9 +145,23 @@ public class Response {
     private void sendResponseHeader(ContentType contentType) throws IOException {
         output.write(("Content-Type: "+contentType+"; charset=UTF-8\n").getBytes());
         output.write(("date: "+new Date().toString()+"\n").getBytes());
-        output.write(("Server: Ezerver"+"\n\n").getBytes());
+        output.write(("Server: Ezerver"+"\n").getBytes());
     }
 
+    /**
+     * 内部调用方法
+     *
+     * 添加响应报文的 响应头 信息
+     *
+     * 自定义请求 响应头 的 key 和 值
+     *
+     * @param header
+     * @param value
+     * @throws IOException
+     */
+    private void sendResponseHeader(String header, String value) throws IOException {
+        output.write((header + ": " + value +"\n").getBytes());
+    }
 
     /**
      * 内部调用方法
@@ -159,6 +173,7 @@ public class Response {
      * @throws IOException
      */
     private void sendResponseBody(File file) throws IOException {
+        output.write(("\n").getBytes());
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
         byte[] bytes = new byte[2048];
         int read;
@@ -202,15 +217,43 @@ public class Response {
      * 外部可调用方法
      *
      * 直接返回 HTML 代码
-     * 用户直接调用就可以向客户端返回 JSON 数据了
      *
-     * @param textHtml 需要发送的 JSON 文本串
+     * @param textHtml 需要发送的 HTML 代码
      * @throws IOException
      */
     public void sendTextHtml(String textHtml) throws IOException {
         sendResponseLine(StateCode.CODE_200);
         sendResponseHeader(ContentType.TEXT_HTML);
         sendResponseBody(textHtml);
+    }
+
+    /**
+     * 外部可调用方法
+     *
+     * 302 跳转
+     *
+     * @param location 需要发送的 JSON 文本串
+     * @throws IOException
+     */
+    public void sendRedirect302(String location) throws IOException {
+        sendResponseLine(StateCode.CODE_302);
+        sendResponseHeader(ContentType.TEXT_HTML);
+        sendResponseHeader("Location", location);
+    }
+
+
+    /**
+     * 外部可调用方法
+     *
+     * 301 跳转
+     *
+     * @param location 需要发送的 JSON 文本串
+     * @throws IOException
+     */
+    public void sendRedirect301(String location) throws IOException {
+        sendResponseLine(StateCode.CODE_301);
+        sendResponseHeader(ContentType.TEXT_HTML);
+        sendResponseHeader("Location", location);
     }
 
     /**

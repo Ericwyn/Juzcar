@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -155,6 +156,19 @@ public class SimpleHttpServer {
          */
         public Builder addHandleMethod(HandleMethod handleMethod){
             this.server.addHandleMethod(handleMethod);
+            return this;
+        }
+
+        /**
+         * 添加多个对特定路径请求的自定义处理方法
+         *
+         * @param handleMethods
+         * @return
+         */
+        public Builder addHandleMethod(List<HandleMethod> handleMethods){
+            for (HandleMethod handleMethod : handleMethods){
+                this.server.addHandleMethod(handleMethod);
+            }
             return this;
         }
 
