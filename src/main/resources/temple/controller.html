@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,  user-scalable=no">
-    <title>Juzcar</title>
+    <title>Juzcar 文档详情页面</title>
     <link rel="stylesheet" href="css/mdui.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -20,7 +20,7 @@
             <button onclick="inst.toggle()" class="mdui-btn mdui-btn-icon mdui-text-color-white">
                 <i class="mdui-icon material-icons">menu</i></button>
             <p class="mdui-typo-headline">API 查看</p>
-            <p class="mdui-typo-title">aaaController</p>
+            <p class="mdui-typo-title">文档 - {{.PackageName}}</p>
             <div class="mdui-toolbar-spacer"></div>
             <button class="mdui-btn">导出文档</button>
         </div>
@@ -75,29 +75,11 @@
     <div class="mdui-container ">
         <div class="mdui-drawer " id="drawer" >
             <ul class="mdui-list mdui-collapse">
-                
-                <li class="mdui-list-item mdui-ripple" onclick="">
+                <li class="mdui-list-item mdui-ripple" onclick="gotoApiPage('index')">
                     <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
                     <div class="mdui-list-item-content">文档首页</div>
                 </li>
-
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">页面接口</div>
-                </li>
-
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">数据接口</div>
-                </li>
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">TestController</div>
-                </li>
-
+                {{.Nav}}
             </ul>
         </div>
     </div>
