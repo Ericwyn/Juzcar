@@ -15,4 +15,10 @@ public class TempleKey {
     // 导航项
     public static final String NAVITEM_NAME = "Name";
     public static final String NAVITEM_PACKAGENAME = "PackageName";
+
+    // API 详情页面
+    public static final String API_PACKAGENAME = "PackageName";
+    public static final String API_CONTROLLERNAME = "ControllerName";
+    public static final String API_NAV = "Nav";
+
 }

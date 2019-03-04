@@ -1,8 +1,10 @@
 package com.ericwyn.juzcar.server.tml;
 
+import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.server.JuzcarDocServer;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  *
@@ -14,6 +16,7 @@ import java.io.File;
  */
 public class TempleUtils {
     private static File templeDir = new File(JuzcarDocServer.JAR_TEMPLE_PATH);
+    private static HttpTemple navItemTemple = new HttpTemple(TempleUtils.getTemple("navItem"));
 
     /**
      * 通过模板名称获取模板的文件
@@ -35,4 +38,24 @@ public class TempleUtils {
         }
     }
 
+    /**
+     * 渲染出一个导航栏，多个页面共用所以提取出来了
+     * @param apis
+     * @return
+     */
+    public static String getNavTemple(Map<String, JuzcarApiList> apis){
+        String nav = "";
+        for (String key : apis.keySet()){
+            navItemTemple.clearReplace();
+            navItemTemple.replace(TempleKey.NAVITEM_NAME, apis.get(key).getClazz().getNote());
+            navItemTemple.replace(TempleKey.NAVITEM_PACKAGENAME, getUriFromApiKey(key));
+
+            nav += navItemTemple.string()+"\n";
+        }
+        return nav;
+    }
+
+    public static String getUriFromApiKey(String key){
+        return key.replaceAll("\\.","_");
+    }
 }
