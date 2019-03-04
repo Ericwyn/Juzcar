@@ -2,14 +2,19 @@ package com.ericwyn.juzcar.server;
 
 import com.ericwyn.ezerver.SimpleHttpServer;
 import com.ericwyn.ezerver.expection.WebServerException;
+import com.ericwyn.ezerver.handle.HandleMethod;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.server.handle.ApiHandle;
+import com.ericwyn.juzcar.server.handle.PageHandle;
+import com.ericwyn.juzcar.utils.JuzcarLogs;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -33,25 +38,23 @@ public class JuzcarDocServer {
         }
     }
 
-//    public void startServer() throws WebServerException {
-//        ApiHandle apiHandle = new ApiHandle();
-//
-//        SimpleHttpServer server = new SimpleHttpServer.Builder()
-//                .setServerPort(9696)
-//                .addHandleMethod(apiHandle.apiJsonHandle(apiMaps))
-//                .setWebRoot(".juzcar/static")
-//                .allowDebug()
-//                .build();
-//        server.start();
-//    }
-
+    /**
+     * DOC Server 启动，负责返回页面
+     * @param httpPort
+     * @param allowDebug
+     * @throws WebServerException
+     */
     public void startServer(int httpPort, boolean allowDebug) throws WebServerException {
         ApiHandle apiHandle = new ApiHandle();
-
+        PageHandle pageHandle = new PageHandle();
 
         SimpleHttpServer.Builder builder = new SimpleHttpServer.Builder()
                 .setServerPort(httpPort)
-                .addHandleMethod(apiHandle.apiJsonHandle(apiMaps))
+                .addHandleMethod(Arrays.asList(
+                        apiHandle.apiJsonHandle(apiMaps),
+                        pageHandle.redireRootHandle(),
+                        pageHandle.indexPageHandle(apiMaps)
+                ))
                 .setWebRoot(".juzcar/static");
         if (allowDebug){
             builder.allowDebug();
@@ -68,7 +71,9 @@ public class JuzcarDocServer {
         }
         String path = this.getClass().getClassLoader().getResource("static").getPath();
         if (!path.contains(".jar!")){
-            System.out.println("NOTE!!!! Juzcar 不是以 JAR 形式导入，可能会无法获取所需静态资源文件");
+            JuzcarLogs.SOUT("NOTE!!!! Juzcar 不是以 JAR 形式导入，可能会无法获取所需静态资源文件");
+        } else {
+            JuzcarLogs.SOUT("Juzcar 已经成功以 JAR 的形式导入");
         }
         path = path.substring(5);
         path = path.substring(0,path.indexOf(".jar!")+4);
@@ -77,6 +82,7 @@ public class JuzcarDocServer {
         String name ;
         JarEntry jarEntry ;
         while (entries.hasMoreElements()){
+            // 创建一个 .juzcar 文件夹，存储从 jar 当中提取出来的 static 当中的静态文件
             jarEntry = entries.nextElement();
             name = jarEntry.toString();
             if (name.startsWith("static")){
