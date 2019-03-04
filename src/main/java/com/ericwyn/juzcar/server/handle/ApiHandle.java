@@ -13,7 +13,13 @@ import java.util.Map;
  * Created by Ericwyn on 18-12-1.
  */
 public class ApiHandle {
-    public HandleMethod apiJsonHandle(Map<String, JuzcarApiList> apis){
+    private Map<String, JuzcarApiList> apis ;
+
+    public ApiHandle(Map<String, JuzcarApiList> apis){
+        this.apis = apis;
+    }
+
+    public HandleMethod apiJsonHandle(){
         return new HandleMethod("/api") {
             @Override
             public void requestDo(Request request, Response response) throws IOException {

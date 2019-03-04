@@ -18,23 +18,29 @@ import java.io.IOException;
  */
 public class HttpTemple {
     // String 其实不太环保？？？但是 Replace 方法的话 StringBuild 和 StringBuffer 似乎没办法解决
-    private String sbf;
+    private String templeStr ="";
+
+    // 这里分为两个 templeStr，具体的替换操作放在了 resHtml
+    // templeStr 作为原始记录保存，这样的话这个 HttpTemple 就可以多次使用了
+    // 只需要调用 clearReplace 接口就可以恢复 resHtml
+    private String resHtml = "";
 
     // 通过字符串创建 Temple
     public HttpTemple(String sbf){
-        this.sbf = sbf;
+        this.templeStr = sbf;
+        this.resHtml = sbf;
     }
 
     // 通过文件创建 Temple
     public HttpTemple(File file){
         FileInputStream inputStream = null;
         try {
-            sbf = "";
+            templeStr = "";
             inputStream = new FileInputStream(file);
             byte[] bytes = new byte[2048];
             int length = -1;
             while ((length = inputStream.read(bytes)) != -1){
-                sbf += new String(bytes,0, length);
+                templeStr += new String(bytes,0, length);
             }
         }catch (IOException ioe){
             ioe.printStackTrace();
@@ -47,21 +53,36 @@ public class HttpTemple {
                 }
             }
         }
+        resHtml = templeStr;
     }
 
-    // 渲染某些元素
+    /**
+     * 渲染某些元素
+     * 因为替换的模板内容是 {{.KEY}}，所以 key 不包含 . 和 {{}}
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     public HttpTemple replace(String key, String value){
-        sbf = sbf.replaceAll(getReplaceKey(key), value);
+        this.resHtml = resHtml.replaceAll("\\{\\{\\."+key+"}}", value);
         return this;
     }
 
-    // key 的构建方法
-    private String getReplaceKey(String key){
-        return "{{"+key+"}}";
+    /**
+     * 清除已渲染的内容，使模板恢复原来状态
+     * @return
+     */
+    public HttpTemple clearReplace(){
+        this.resHtml = templeStr;
+        return this;
     }
 
-    // 获取渲染之后的文件
-    public String build(){
-        return this.sbf;
+    /**
+     * 获取渲染之后的 HTML
+     * @return
+     */
+    public String string(){
+        return this.resHtml;
     }
 }
