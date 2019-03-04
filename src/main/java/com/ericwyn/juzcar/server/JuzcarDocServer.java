@@ -61,6 +61,7 @@ public class JuzcarDocServer {
                         pageHandle.redireRootHandle(),
                         pageHandle.indexPageHandle()
                 ))
+                .addHandleMethod(pageHandle.apiPageHandles())
                 .setWebRoot(".juzcar/static");
         if (allowDebug){
             builder.allowDebug();
