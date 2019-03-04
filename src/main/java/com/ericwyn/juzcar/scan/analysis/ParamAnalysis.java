@@ -34,6 +34,13 @@ public class ParamAnalysis {
                 Boolean required = (Boolean) getRequired.invoke(annotation);
                 String name = getName.invoke(annotation).toString();
                 String value = getValue.invoke(annotation).toString();
+                // 注解当中 name 和 value 是同义的
+                if (name.equals("") && !value.equals("")){
+                    name = value;
+                }
+                if (value.equals("") && !name.equals("")){
+                    value = name;
+                }
                 String defaultValue = getDefaultValue.invoke(annotation).toString();
                 JuzcarParam juzcarParam = new JuzcarParam(name, value, defaultValue, required);
                 switch (parameter.getType().getName()){

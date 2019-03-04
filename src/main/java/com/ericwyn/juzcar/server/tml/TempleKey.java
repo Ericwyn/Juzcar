@@ -11,14 +11,27 @@ package com.ericwyn.juzcar.server.tml;
 public class TempleKey {
     // 首页的 README
     public static final String INDEX_README = "README";
-    public static final String INDEX_NAV = "Nav";
+    public static final String INDEX_Nav = "Nav";
     // 导航项
-    public static final String NAVITEM_NAME = "Name";
-    public static final String NAVITEM_PACKAGENAME = "PackageName";
+    public static final String NAVITEM_Name = "Name";
+    public static final String NAVITEM_PackageName = "PackageName";
 
     // API 详情页面
-    public static final String API_PACKAGENAME = "PackageName";
-    public static final String API_CONTROLLERNAME = "ControllerName";
-    public static final String API_NAV = "Nav";
+    public static final String API_PackgeName = "PackageName";
+    public static final String API_ControllerName = "ControllerName";
+    public static final String API_Nav = "Nav";
+    public static final String API_ApiList = "ApiList";
+
+    // API List
+    public static final String APIITEM_APINAME="ApiName";
+    public static final String APIITEM_APIURL="ApiUri";
+    public static final String APIITEM_ApiMethod ="ApiMethod";
+    public static final String APIITEM_ParamItemList ="ParamItemList";
+
+    // Param List
+    public static final String PARAMLIST_ParamName="ParamName";
+    public static final String PARAMLIST_ParamType="ParamType";
+    public static final String PARAMLIST_ParamRequire="ParamRequire";
+    public static final String PARAMLIST_ParamNote="ParamNote";
 
 }

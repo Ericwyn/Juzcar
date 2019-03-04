@@ -45,7 +45,7 @@ public class PageHandle {
                 // 渲染 README
                 temple.replace(TempleKey.INDEX_README, "README");
                 // 渲染 INDEX
-                temple.replace(TempleKey.INDEX_NAV, TempleUtils.getNavTemple(apis));
+                temple.replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis));
 
                 response.sendTextHtml(temple.string());
                 response.closeStream();
@@ -63,10 +63,11 @@ public class PageHandle {
             handleMethods.add(new HandleMethod(requestUri) {
                 @Override
                 public void requestDo(Request request, Response response) throws IOException {
-                    apiPageTemple.clearReplace();
-                    apiPageTemple.replace(TempleKey.API_NAV, TempleUtils.getNavTemple(apis));
-                    apiPageTemple.replace(TempleKey.API_PACKAGENAME, key);
-                    String apiPageHTML = apiPageTemple.string();
+                    String apiPageHTML = apiPageTemple.clearReplace()
+                            .replace(TempleKey.API_Nav, TempleUtils.getNavTemple(apis))
+                            .replace(TempleKey.API_PackgeName, key)
+                            .replace(TempleKey.API_ApiList, TempleUtils.getApiListTemple(apis.get(key)))
+                            .string();
                     response.sendTextHtml(apiPageHTML);
                     response.closeStream();
                 }

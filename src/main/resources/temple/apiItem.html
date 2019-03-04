@@ -1,0 +1,28 @@
+<div class="juzcar-api-container">
+    <div class="juzcar-api-title">
+        <div>
+            <h2>{{.ApiName}}</h2>
+            <ul>
+                <li><code>{{.ApiUri}}</code></li>
+                <li>请求方法 <code>{{.ApiMethod}}</code></li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <div class="mdui-table-fluid">
+            <table class="mdui-table">
+                <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>类型</th>
+                    <th>是否必须</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{.ParamItemList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

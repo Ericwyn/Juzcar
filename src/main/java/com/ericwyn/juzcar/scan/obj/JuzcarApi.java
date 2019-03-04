@@ -37,12 +37,28 @@ public class JuzcarApi {
         return method;
     }
 
+    public String getMethodString() {
+        String res = "";
+        for (String str : this.method){
+            res += str +", ";
+        }
+        return res.length() > 0 ? res.substring(0, res.length() -1) : res;
+    }
+
     public void setMethod(String[] method) {
         this.method = method;
     }
 
     public String[] getUrl() {
         return url;
+    }
+
+    public String getUrlString() {
+        String res = "";
+        for (String str : this.url){
+            res += str +", ";
+        }
+        return res.length() > 0 ? res.substring(0, res.length() -1) : res;
     }
 
     public void setUrl(String[] url) {

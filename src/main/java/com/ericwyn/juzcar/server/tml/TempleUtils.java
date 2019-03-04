@@ -1,9 +1,13 @@
 package com.ericwyn.juzcar.server.tml;
 
+import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
+import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 import com.ericwyn.juzcar.server.JuzcarDocServer;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -16,7 +20,10 @@ import java.util.Map;
  */
 public class TempleUtils {
     private static File templeDir = new File(JuzcarDocServer.JAR_TEMPLE_PATH);
+
     private static HttpTemple navItemTemple = new HttpTemple(TempleUtils.getTemple("navItem"));
+    private static HttpTemple apiListTemple = new HttpTemple(TempleUtils.getTemple("apiItem"));
+    private static HttpTemple paramListTemple = new HttpTemple(TempleUtils.getTemple("paramItem"));
 
     /**
      * 通过模板名称获取模板的文件
@@ -46,13 +53,43 @@ public class TempleUtils {
     public static String getNavTemple(Map<String, JuzcarApiList> apis){
         String nav = "";
         for (String key : apis.keySet()){
-            navItemTemple.clearReplace();
-            navItemTemple.replace(TempleKey.NAVITEM_NAME, apis.get(key).getClazz().getNote());
-            navItemTemple.replace(TempleKey.NAVITEM_PACKAGENAME, getUriFromApiKey(key));
+            navItemTemple.clearReplace()
+                    .replace(TempleKey.NAVITEM_Name, apis.get(key).getClazz().getNote())
+                    .replace(TempleKey.NAVITEM_PackageName, getUriFromApiKey(key));
 
             nav += navItemTemple.string()+"\n";
         }
         return nav;
+    }
+
+    public static String getParamListTemple(JuzcarApi api){
+        String resTml = "";
+        for (JuzcarParam param : api.getParams()){
+            if (param == null){
+                continue;
+            }
+            resTml += paramListTemple.clearReplace()
+                    .replace(TempleKey.PARAMLIST_ParamName, param.getName())
+                    .replace(TempleKey.PARAMLIST_ParamNote, "参数备注")
+                    .replace(TempleKey.PARAMLIST_ParamRequire, param.getRequired() != null && param.getRequired()?"是":"否")
+                    .replace(TempleKey.PARAMLIST_ParamType, param.getType().getName())
+                    .string();
+        }
+        return resTml;
+    }
+
+    public static String getApiListTemple(JuzcarApiList apiList){
+        String resTml = "";
+        for (JuzcarApi api : apiList.getApis()){
+            apiListTemple.clearReplace();
+            resTml += apiListTemple.clearReplace()
+                    .replace(TempleKey.APIITEM_APINAME, api.getName())
+                    .replace(TempleKey.APIITEM_ApiMethod, api.getMethodString())
+                    .replace(TempleKey.APIITEM_APIURL, api.getUrlString())
+                    .replace(TempleKey.APIITEM_ParamItemList, getParamListTemple(api))
+                    .string();
+        }
+        return resTml;
     }
 
     public static String getUriFromApiKey(String key){
