@@ -28,35 +28,15 @@
 
 <!--页面内容放置区域-->
     <div class="mdui-container doc-container mdui-p-t-4">
-        <div class="mdui-typo"></div>
+        <div class="mdui-typo">
+            {{.README}}
+        </div>
     </div>
 
     <div class="mdui-container ">
         <div class="mdui-drawer " id="drawer" >
             <ul class="mdui-list mdui-collapse">
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">文档首页</div>
-                </li>
-
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">页面接口</div>
-                </li>
-
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">数据接口</div>
-                </li>
-
-                <li class="mdui-list-item mdui-ripple" onclick="">
-                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
-                    <div class="mdui-list-item-content">TestController</div>
-                </li>
-
+                {{.Nav}}
             </ul>
         </div>
     </div>
