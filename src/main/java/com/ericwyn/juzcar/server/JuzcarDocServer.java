@@ -85,7 +85,7 @@ public class JuzcarDocServer {
             // 创建一个 .juzcar 文件夹，存储从 jar 当中提取出来的 static 当中的静态文件
             jarEntry = entries.nextElement();
             name = jarEntry.toString();
-            if (name.startsWith("static")){
+            if (name.startsWith("static") || name.startsWith("temple")){
                 if (name.endsWith("/")){
                     File dir = new File(".juzcar/"+name);
                     dir.mkdirs();

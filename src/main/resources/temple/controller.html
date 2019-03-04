@@ -1,0 +1,117 @@
+<html lang="en" xmlns:https="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  user-scalable=no">
+    <title>Juzcar</title>
+    <link rel="stylesheet" href="css/mdui.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+
+        body{
+            background: #f6f6f6;
+        }
+    </style>
+</head>
+<body class="mdui-theme-accent-deep-orange mdui-theme-primary-blue-grey index_bg mdui-drawer-body-left mdui-appbar-with-toolbar">
+<!--抽屉导航栏的顶栏-->
+<div class="mdui-container">
+    <header class="mdui-appbar mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-theme ">
+            <button onclick="inst.toggle()" class="mdui-btn mdui-btn-icon mdui-text-color-white">
+                <i class="mdui-icon material-icons">menu</i></button>
+            <p class="mdui-typo-headline">API 查看</p>
+            <p class="mdui-typo-title">aaaController</p>
+            <div class="mdui-toolbar-spacer"></div>
+            <button class="mdui-btn">导出文档</button>
+        </div>
+    </header>
+</div>
+
+<!--页面内容放置区域-->
+    <div class="mdui-container doc-container mdui-p-t-4">
+        <div id="apiContainer" class="mdui-typo">
+            <div class="juzcar-api-container">
+                <div class="juzcar-api-title">
+                    <div>
+                        <h2>接口名称</h2>
+                        <ul>
+                            <li><code>/api/v1/test</code></li>
+                            <li>请求方法 <code>POST</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="mdui-table-fluid">
+                        <table class="mdui-table">
+                            <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>类型</th>
+                                <th>是否必须</th>
+                                <th>备注</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>p1</td>
+                                <td>java.lang.Integer</td>
+                                <td>否</td>
+                                <td>备注1</td>
+                            </tr>
+                            <tr>
+                                <td>p2</td>
+                                <td>java.lang.String</td>
+                                <td>是</td>
+                                <td>备注2</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdui-container ">
+        <div class="mdui-drawer " id="drawer" >
+            <ul class="mdui-list mdui-collapse">
+                
+                <li class="mdui-list-item mdui-ripple" onclick="">
+                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
+                    <div class="mdui-list-item-content">文档首页</div>
+                </li>
+
+
+                <li class="mdui-list-item mdui-ripple" onclick="">
+                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
+                    <div class="mdui-list-item-content">页面接口</div>
+                </li>
+
+
+                <li class="mdui-list-item mdui-ripple" onclick="">
+                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
+                    <div class="mdui-list-item-content">数据接口</div>
+                </li>
+
+                <li class="mdui-list-item mdui-ripple" onclick="">
+                    <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-theme">&#xe0e2;</i>
+                    <div class="mdui-list-item-content">TestController</div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</body>
+<!--引入自定义js-->
+<script type="text/javascript" src="js/mdui.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+
+<script></script>
+
+<script type="text/javascript">
+
+    let inst = new mdui.Drawer('#drawer', {swipe: true});
+
+
+</script>
+</html>
