@@ -9,7 +9,13 @@ import java.util.Date;
 public class JuzcarLogs {
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    private static enum Level{
+    private static boolean logFalg = true;
+
+    public static void setLogFalg(boolean logFalg) {
+        JuzcarLogs.logFalg = logFalg;
+    }
+
+    public static enum Level{
         DEBUG("DEBUG"),
         ERROR("ERROR");
 

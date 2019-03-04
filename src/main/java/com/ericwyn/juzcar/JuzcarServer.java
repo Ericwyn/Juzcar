@@ -43,6 +43,9 @@ public class JuzcarServer {
         Runnable juzcarRunnable = new Runnable() {
             @Override
             public void run() {
+                // 先设置 log flag
+                JuzcarLogs.setLogFalg(config.isJuzcarServerLog());
+
                 // scan 模块
                 List<JuzcarClass> juzcarClasses = ScannerUtils.scannerAllController(initClass);
                 // 确定类当中哪些是真的要扫描的（去掉被 Ignore 注解的类）
@@ -74,7 +77,7 @@ public class JuzcarServer {
                 // TODO 如果交流的方式并非 JSON 而是 XML ？（暂时不考虑支持 xml 了
                 // TODO 增加一些注解能够强硬设置API 的信息，注解在方法，替换掉自动分析注解得到的 api 信息
                 // TODO 增加一个注解来设置 Controller 的名字，注解在类，避免 Controller 名字太长
-
+                // TODO Juzcar 接管 SimpleHttpServer 的日志打印
                 // TODOO server 默认不开启日志,使用 debug Flag 开启日志
             }
         };

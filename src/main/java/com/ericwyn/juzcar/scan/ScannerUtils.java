@@ -12,6 +12,7 @@ import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.scan.obj.JuzcarClass;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethodList;
+import com.ericwyn.juzcar.utils.JuzcarLogs;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -60,11 +61,14 @@ public class ScannerUtils {
         try {
             // 这里确认 url 是一个文件的位置
             if (url.toString().startsWith("file")){
-                System.out.println(url.toString());
-                System.out.println(path);
-                System.out.println(url.toString().indexOf(path));
+//                System.out.println(url.toString());
+//                System.out.println(path);
+//                System.out.println(url.toString().indexOf(path));
+//
+//                System.out.println(url.toString().substring(url.toString().indexOf(path)));
+
+                JuzcarLogs.SOUT("扫描的文件 : "+url.toString());
                 int packageNameStart = url.toString().indexOf(path);
-                System.out.println(url.toString().substring(url.toString().indexOf(path)));
                 String filePath = URLDecoder.decode(url.getFile(),"utf-8");
                 File dir = new File(filePath);
                 List<File> fileList = new ArrayList<>();
