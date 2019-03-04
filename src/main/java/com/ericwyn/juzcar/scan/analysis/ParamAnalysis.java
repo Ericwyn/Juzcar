@@ -53,10 +53,13 @@ public class ParamAnalysis {
                     case "java.lang.Double":
                         juzcarParam.setType(Double.class);
                         break;
-                    // TODO 其他类型的参数
+                    // TODOO 其他类型的参数
+                    default:
+                        juzcarParam.setType(Class.forName(parameter.getType().getName()));
+                        break;
                 }
                 return juzcarParam;
-            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nme){
+            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException nme){
                 nme.printStackTrace();
                 return null;
             }
