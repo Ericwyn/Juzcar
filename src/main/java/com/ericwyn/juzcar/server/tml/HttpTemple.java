@@ -65,7 +65,9 @@ public class HttpTemple {
      * @return
      */
     public HttpTemple replace(String key, String value){
-        this.resHtml = resHtml.replaceAll("\\{\\{\\."+key+"}}", value);
+        if (key != null && value != null){
+            this.resHtml = resHtml.replaceAll("\\{\\{\\."+key+"}}", value);
+        }
         return this;
     }
 
