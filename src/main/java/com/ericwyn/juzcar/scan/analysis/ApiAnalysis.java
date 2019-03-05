@@ -1,6 +1,7 @@
 package com.ericwyn.juzcar.scan.analysis;
 
 import com.ericwyn.juzcar.config.PackageName;
+import com.ericwyn.juzcar.scan.annotations.JuzcarParamNote;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
@@ -194,13 +195,32 @@ public class ApiAnalysis {
             Annotation[] annotations = parameter.getAnnotations();
             ParamAnalysisCb parameAnalysis;
             for (Annotation an : annotations){
+                // 如果是 JuzcarParamNote 这些自定义注解的话就不需要去 CB 里面写解析了
+                // 直接在这里就好了
                 String analysisKey = an.annotationType().getName();
-                parameAnalysis = parameAnalysisMap.get(analysisKey);
-                // 参数的注解
-                if (parameAnalysis != null){
-                    // 对 @RequestParam 注解的解析
-                    res.add(parameAnalysis.analysis(parameter, an));
-                    // 对 @RequestBody 注解的解析
+
+                // @RequestParam 的处理
+                if (analysisKey.equals(PackageName.RequestParam)){
+                    parameAnalysis = parameAnalysisMap.get(PackageName.RequestParam);
+                    if (parameAnalysis != null){
+                        // 获取了 juzcarParam 的具体
+                        JuzcarParam juzcarParam = parameAnalysis.analysis(parameter, an);
+                        // 之后就看看有没有 JuzcarParamNote
+                        for (Annotation an2 : annotations){
+                            if (an2 instanceof JuzcarParamNote){
+                                juzcarParam.setNote(((JuzcarParamNote)an2).value());
+                                break;
+                            }
+                        }
+                        if (juzcarParam.getNote() == null){
+                            juzcarParam.setNote("");
+                        }
+                        res.add(juzcarParam);
+                    }
+                }
+                // @RequestBody 的处理
+                if (analysisKey.equals(PackageName.RequestBody)){
+                    parameAnalysis = parameAnalysisMap.get(PackageName.RequestBody);
                     List<JuzcarParam> paramsFromRequestBody = parameAnalysis.analysisBody(parameter, an);
                     if (null != paramsFromRequestBody && paramsFromRequestBody.size() != 0){
                         res.addAll(paramsFromRequestBody);

@@ -1,5 +1,6 @@
 package com.ericwyn.juzcar.scan.analysis;
 
+import com.ericwyn.juzcar.scan.annotations.JuzcarParamNote;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 
@@ -94,6 +95,16 @@ public class ParamAnalysis {
                 juzcarParam.setDefaultValue(null);
                 juzcarParam.setName(varName);
                 juzcarParam.setRequired(false);  // RequestBody 应该都算是非必须变量吧
+                // field 的注解
+                Annotation[] annotations = field.getAnnotations();
+                for (Annotation an : annotations){
+                    if (an instanceof JuzcarParamNote){
+                        juzcarParam.setNote(((JuzcarParamNote) an).value());
+                    }
+                }
+                if (juzcarParam.getNote() == null){
+                    juzcarParam.setNote("");
+                }
                 res.add(juzcarParam);
             }
             return res;

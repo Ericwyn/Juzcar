@@ -11,6 +11,7 @@ public class JuzcarParam {
     private String defaultValue;
     private Boolean required;
     private Class type;
+    private String note;
 
     public JuzcarParam() {
     }
@@ -68,5 +69,14 @@ public class JuzcarParam {
 
     public void setType(Class type) {
         this.type = type;
+    }
+
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
