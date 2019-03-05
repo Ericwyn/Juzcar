@@ -18,13 +18,14 @@ public class TempleKey {
 
     // API 详情页面
     public static final String API_PackgeName = "PackageName";
-    public static final String API_ControllerName = "ControllerName";
     public static final String API_Nav = "Nav";
     public static final String API_ApiList = "ApiList";
+    public static final String API_ControllerNote = "ControllerNote";
 
     // API List
-    public static final String APIITEM_APINAME="ApiName";
-    public static final String APIITEM_APIURL="ApiUri";
+    public static final String APIITEM_ApiName ="ApiName";
+    public static final String APIITEM_ApiNote="ApiNote";
+    public static final String APIITEM_ApiURL ="ApiUri";
     public static final String APIITEM_ApiMethod ="ApiMethod";
     public static final String APIITEM_ParamItemList ="ParamItemList";
 

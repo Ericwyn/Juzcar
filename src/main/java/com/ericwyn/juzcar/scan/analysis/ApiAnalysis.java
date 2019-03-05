@@ -3,6 +3,7 @@ package com.ericwyn.juzcar.scan.analysis;
 import com.ericwyn.juzcar.config.PackageName;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
+import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
 import com.ericwyn.juzcar.scan.obj.ReturnType;
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
@@ -37,8 +38,9 @@ public class ApiAnalysis {
      */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_RequestMapping = new ApiAnalysisCb() {
         @Override
-        public JuzcarApi analysis(Method method, Annotation annotation) {
+        public JuzcarApi analysis(JuzcarMethod juzcarMethod, Annotation annotation) {
             try {
+                Method method = juzcarMethod.getMethod();
                 JuzcarApi api = new JuzcarApi();
 
                 // 分析 org.springframework.web.bind.annotation.RequestMapping 的方法
@@ -68,6 +70,7 @@ public class ApiAnalysis {
                 // 设置 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
                 api.setReturnType(getApiType(method));
+                api.setApiNote(juzcarMethod.getNote());
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -81,8 +84,10 @@ public class ApiAnalysis {
      */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_PostMapping = new ApiAnalysisCb() {
         @Override
-        public JuzcarApi analysis(Method method, Annotation annotation) {
+        public JuzcarApi analysis(JuzcarMethod juzcarMethod, Annotation annotation) {
             try {
+                Method method = juzcarMethod.getMethod();
+
                 JuzcarApi api = new JuzcarApi();
 
                 // 分析 org.springframework.web.bind.annotation.PostMapping 的方法
@@ -106,6 +111,7 @@ public class ApiAnalysis {
                 // 获取原本 api 中的参数，用以分析 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
                 api.setReturnType(getApiType(method));
+                api.setApiNote(juzcarMethod.getNote());
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -119,10 +125,11 @@ public class ApiAnalysis {
      */
     public static ApiAnalysisCb org_springframework_web_bind_annotation_GetMapping = new ApiAnalysisCb() {
         @Override
-        public JuzcarApi analysis(Method method, Annotation annotation) {
+        public JuzcarApi analysis(JuzcarMethod juzcarMethod, Annotation annotation) {
             try {
-                JuzcarApi api = new JuzcarApi();
+                Method method = juzcarMethod.getMethod();
 
+                JuzcarApi api = new JuzcarApi();
                 // 分析 org.springframework.web.bind.annotation.GetMapping 的方法
                 Method Params = annotation.annotationType().getMethod("params");
                 Method headers = annotation.annotationType().getMethod("headers");
@@ -144,6 +151,7 @@ public class ApiAnalysis {
                 // 设置 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
                 api.setReturnType(getApiType(method));
+                api.setApiNote(juzcarMethod.getNote());
                 return api;
             } catch (Exception e) {
                 e.printStackTrace();

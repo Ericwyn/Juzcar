@@ -1,6 +1,7 @@
 package com.ericwyn.juzcar.scan.cb;
 
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.scan.obj.JuzcarMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -12,5 +13,5 @@ import java.lang.reflect.Method;
  */
 public interface ApiAnalysisCb {
     // 原本的 Method
-    public JuzcarApi analysis(Method method, Annotation annotation);
+    public JuzcarApi analysis(JuzcarMethod juzcarMethod, Annotation annotation);
 }

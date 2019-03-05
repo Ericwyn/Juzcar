@@ -210,13 +210,15 @@ public class ScannerUtils {
             methodListTemp = methodMap.get(packageName);
             List<JuzcarApi> apiList = new ArrayList<>();
             List<JuzcarMethod> methodList = methodListTemp.getMethods();
-            for (JuzcarMethod method : methodList){
+            for (JuzcarMethod juzcarMethod : methodList){
                 // 分析 method 里面的注解，对 Api 注解进行分析并且返回 JuzcarApi 对象，将 Method 的注解变成一个个 API
-                for (String anName : method.getAnnotationMap().keySet()){
+                for (String anName : juzcarMethod.getAnnotationMap().keySet()){
+                    // 如果这个 method 里面包含一些特定的注解例如 @RequestMapping 的话
+                    // 就要对其进行处理，解析出 JuzcarApi
                     if (methodAnnotaions.contains(anName)){
                         ApiAnalysisCb apiAnalysis = apiAnalysisMap.get(anName);
-                        Annotation annotation = method.getAnnotationMap().get(anName);
-                        JuzcarApi api = apiAnalysis.analysis(method.getMethod(),annotation);
+                        Annotation annotation = juzcarMethod.getAnnotationMap().get(anName);
+                        JuzcarApi api = apiAnalysis.analysis(juzcarMethod,annotation);
                         apiList.add(api);
 //                        methodList.add(apiAnalysisMap.get(anName).analysis(method.getAnnotationMap().get(anName)))
                     }

@@ -6,8 +6,6 @@ import com.ericwyn.juzcar.scan.obj.JuzcarParam;
 import com.ericwyn.juzcar.server.JuzcarDocServer;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -83,10 +81,12 @@ public class TempleUtils {
         for (JuzcarApi api : apiList.getApis()){
             apiListTemple.clearReplace();
             resTml += apiListTemple.clearReplace()
-                    .replace(TempleKey.APIITEM_APINAME, api.getName())
+                    .replace(TempleKey.APIITEM_ApiNote, api.getApiNote())
+                    .replace(TempleKey.APIITEM_ApiName, api.getName())
                     .replace(TempleKey.APIITEM_ApiMethod, api.getMethodString())
-                    .replace(TempleKey.APIITEM_APIURL, api.getUrlString())
+                    .replace(TempleKey.APIITEM_ApiURL, api.getUrlString())
                     .replace(TempleKey.APIITEM_ParamItemList, getParamListTemple(api))
+                    .replace(TempleKey.APIITEM_ApiNote, api.getApiNote())
                     .string();
         }
         return resTml;

@@ -66,6 +66,7 @@ public class PageHandle {
                     String apiPageHTML = apiPageTemple.clearReplace()
                             .replace(TempleKey.API_Nav, TempleUtils.getNavTemple(apis))
                             .replace(TempleKey.API_PackgeName, key)
+                            .replace(TempleKey.API_ControllerNote, apis.get(key).getClazz().getNote())
                             .replace(TempleKey.API_ApiList, TempleUtils.getApiListTemple(apis.get(key)))
                             .string();
                     response.sendTextHtml(apiPageHTML);
