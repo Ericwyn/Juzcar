@@ -68,7 +68,7 @@ public class TempleUtils {
             }
             resTml += paramListTemple.clearReplace()
                     .replace(TempleKey.PARAMLIST_ParamName, param.getName())
-                    .replace(TempleKey.PARAMLIST_ParamNote, "参数备注")
+                    .replace(TempleKey.PARAMLIST_ParamNote, param.getNote())
                     .replace(TempleKey.PARAMLIST_ParamRequire, param.getRequired() != null && param.getRequired()?"是":"否")
                     .replace(TempleKey.PARAMLIST_ParamType, param.getType().getName())
                     .string();
