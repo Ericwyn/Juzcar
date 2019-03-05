@@ -22,6 +22,7 @@ public class JuzcarMethod {
         for (Annotation an : annotations){
             annotationMap.put(an.annotationType().getName(), an);
         }
+        this.note = note;
     }
 
     public Method getMethod() {
