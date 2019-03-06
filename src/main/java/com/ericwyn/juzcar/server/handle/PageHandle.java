@@ -40,14 +40,10 @@ public class PageHandle {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
                 HttpTemple temple = new HttpTemple(TempleUtils.getTemple("index"));
-                // 渲染导航栏
-
-                // 渲染 README
-                temple.replace(TempleKey.INDEX_README, "README");
-                // 渲染 INDEX
-                temple.replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis));
-
-                response.sendTextHtml(temple.string());
+                response.sendTextHtml(temple
+                        .replace(TempleKey.INDEX_README, "README")
+                        .replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis))
+                        .string());
                 response.closeStream();
             }
         };

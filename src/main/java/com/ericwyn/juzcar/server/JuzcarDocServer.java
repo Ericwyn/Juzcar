@@ -3,6 +3,7 @@ package com.ericwyn.juzcar.server;
 import com.ericwyn.ezerver.SimpleHttpServer;
 import com.ericwyn.ezerver.expection.WebServerException;
 import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
+import com.ericwyn.juzcar.server.config.JuzcarDocConfig;
 import com.ericwyn.juzcar.server.handle.ApiHandle;
 import com.ericwyn.juzcar.server.handle.PageHandle;
 import com.ericwyn.juzcar.utils.JuzcarLogs;
@@ -24,13 +25,13 @@ import java.util.jar.JarFile;
 public class JuzcarDocServer {
 
     // juzcar 的临时文件夹
-    public static final String JUZCAR_TEMP_DIR = ".juzcar";
+    public static final String JUZCAR_TEMP_DIR = JuzcarDocConfig.JUZCAR_TEMP_DIR;
 
     // 从 jar 里提取的静态文件（css\js等）存储的文件夹
-    public static final String JAR_STATIC_PATH = JUZCAR_TEMP_DIR +"/" +"static";
+    public static final String JAR_STATIC_PATH = JuzcarDocConfig.JAR_STATIC_PATH;
 
     // 从 jar 里提取的页面模板文件的的存储文件夹
-    public static final String JAR_TEMPLE_PATH = JUZCAR_TEMP_DIR +"/" +"temple";
+    public static final String JAR_TEMPLE_PATH = JuzcarDocConfig.JAR_TEMPLE_PATH;
 
     private Map<String, JuzcarApiList> apiMaps;
 
