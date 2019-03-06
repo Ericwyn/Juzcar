@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.Date;
@@ -175,6 +176,27 @@ public class Response {
     private void sendResponseBody(File file) throws IOException {
         output.write(("\n").getBytes());
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+        byte[] bytes = new byte[2048];
+        int read;
+        while ((read=bis.read(bytes))!=-1){
+            output.write(bytes,0,read);
+            output.flush();
+        }
+        bis.close();
+    }
+
+    /**
+     * 内部调用方法
+     *
+     * 往响应报文的 响应体 信息
+     * 发送 input 流
+     *
+     * @param inputStream
+     * @throws IOException
+     */
+    private void sendResponseBody(InputStream inputStream) throws IOException {
+        output.write(("\n").getBytes());
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
         byte[] bytes = new byte[2048];
         int read;
         while ((read=bis.read(bytes))!=-1){
