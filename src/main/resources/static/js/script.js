@@ -3,6 +3,17 @@ function gotoApiPage(path) {
     window.location.href = path;
 }
 
+// 导出按钮的 onclick
+function outPutDocument() {
+    outPutHTMLDocument();
+    // TODO 其他导出方式选择
+}
+
+// 导出 HTML 格式的文档
+function outPutHTMLDocument() {
+    window.open("/api/outPutHTMLDocument");
+}
+
 //-------------工具方法分割---------------
 
 

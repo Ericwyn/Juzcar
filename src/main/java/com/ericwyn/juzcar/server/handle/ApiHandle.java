@@ -5,7 +5,9 @@ import com.ericwyn.ezerver.handle.HandleMethod;
 import com.ericwyn.ezerver.request.Request;
 import com.ericwyn.ezerver.response.Response;
 import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
+import com.ericwyn.juzcar.server.out.OutputService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -19,11 +21,14 @@ public class ApiHandle {
         this.apis = apis;
     }
 
+    private OutputService outPutService = OutputService.getService();
+
     public HandleMethod apiJsonHandle(){
-        return new HandleMethod("/api") {
+        return new HandleMethod("/api/outPutHTMLDocument") {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
-                response.sendJsonData(JSONObject.toJSONString(apis));
+                File outputHTMLZip = outPutService.getOutputHTMLZip(apis);
+                response.sendFileStream(outputHTMLZip);
                 response.closeStream();
             }
         };
