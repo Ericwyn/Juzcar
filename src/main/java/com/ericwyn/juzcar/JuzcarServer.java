@@ -48,8 +48,8 @@ public class JuzcarServer {
 
                 // scan 模块
                 List<JuzcarClass> juzcarClasses = ScannerUtils.scannerAllController(initClass);
-                // 确定类当中哪些是真的要扫描的（去掉被 Ignore 注解的类）
-                ScannerUtils.removeTheIgnoreController(juzcarClasses);
+
+//                ScannerUtils.removeTheIgnoreController(juzcarClasses);
                 // 以 Controller 名称分组，扫描其中的方法
                 HashMap<String, JuzcarMethodList> juzcarMethodListMap = ScannerUtils.scannerMethods(juzcarClasses);
                 // 针对方法扫描出具体的 API

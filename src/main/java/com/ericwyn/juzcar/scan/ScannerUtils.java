@@ -129,7 +129,8 @@ public class ScannerUtils {
                 }
             }
         });
-        return res;
+        // 确定类当中哪些是真的要扫描的（去掉被 Ignore 注解的类）
+        return removeTheIgnoreController(res);
     }
 
     /**
@@ -137,7 +138,7 @@ public class ScannerUtils {
      * @param classList
      * @return
      */
-    public static List<JuzcarClass> removeTheIgnoreController(List<JuzcarClass> classList){
+    private static List<JuzcarClass> removeTheIgnoreController(List<JuzcarClass> classList){
         Iterator<JuzcarClass> iterator = classList.iterator();
         JuzcarClass clazzTemp;
         while (iterator.hasNext()){
