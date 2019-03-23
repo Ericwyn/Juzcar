@@ -8,6 +8,7 @@ import com.ericwyn.juzcar.scan.obj.JuzcarClass;
 import com.ericwyn.juzcar.scan.obj.JuzcarConfig;
 import com.ericwyn.juzcar.scan.obj.JuzcarMethodList;
 import com.ericwyn.juzcar.server.JuzcarDocServer;
+import com.ericwyn.juzcar.test.JuzcarTestServer;
 import com.ericwyn.juzcar.utils.JuzcarLogs;
 
 import java.util.HashMap;
@@ -26,10 +27,18 @@ public class JuzcarServer {
     private Class initClass;
 
     private HashMap<String, JuzcarApiList> apis;
+    private String[] startArgs;
 
-    private JuzcarServer(Class initClass, HashMap<String, JuzcarApiList> apis) {
+    private JuzcarTestServer testServer;
+
+    private JuzcarServer(Class initClass, HashMap<String, JuzcarApiList> apis, String[] startArgs) {
         this.initClass = initClass;
         this.apis = apis;
+        this.startArgs = startArgs;
+    }
+
+    private void setTestServer(JuzcarTestServer testServer){
+        this.testServer = testServer;
     }
 
     /**
@@ -38,7 +47,7 @@ public class JuzcarServer {
      * @param initClass
      * @param juzcarScanner
      */
-    public static void run(Class initClass, JuzcarScannerCb juzcarScanner, JuzcarConfig config){
+    public static void run(Class initClass, JuzcarScannerCb juzcarScanner, JuzcarConfig config, String[] args){
         // 启动的线程
         Runnable juzcarRunnable = new Runnable() {
             @Override
@@ -55,9 +64,8 @@ public class JuzcarServer {
                 // 针对方法扫描出具体的 API
                 HashMap<String, JuzcarApiList> apis = ScannerUtils.scannerAPI(juzcarMethodListMap);
 
-                JuzcarServer juzcarServer = new JuzcarServer(initClass, apis);
-                // 回调这个 JuzcarServer 到外面去
-                juzcarScanner.callback(juzcarServer);
+                JuzcarServer juzcarServer = new JuzcarServer(initClass, apis, args);
+
 
 //            System.out.println(JSONObject.toJSONString(apis));
 //            System.out.println(juzcarClasses.size());
@@ -69,6 +77,12 @@ public class JuzcarServer {
                     e.printStackTrace();
                 }
 
+                // TestServer 模块初始化
+                JuzcarTestServer testServer = JuzcarTestServer.startServer(apis, args);
+                juzcarServer.setTestServer(testServer);
+
+                // 最后回调这个 JuzcarServer 到外面去
+                juzcarScanner.callback(juzcarServer);
 
                 // TODO server模块，静态页面存储问题
                 // TODO Json 模块导入问题
@@ -89,8 +103,8 @@ public class JuzcarServer {
      * 默认启动函数， 缺省的 cb 和缺省 JuzcarConfig
      * @param initClass
      */
-    public static void run(Class initClass){
-        run(initClass, defaultScannerCb, JuzcarConfig.defaultJuzcarConfig());
+    public static void run(Class initClass, String[] args){
+        run(initClass, defaultScannerCb, JuzcarConfig.defaultJuzcarConfig(), args);
     }
 
 
@@ -98,16 +112,16 @@ public class JuzcarServer {
      * 启动函数， 缺省的 cb, 自定义 JuzcarConfig
      * @param initClass
      */
-    public static void run(Class initClass, JuzcarConfig config){
-        run(initClass, defaultScannerCb, config);
+    public static void run(Class initClass, JuzcarConfig config, String[] args){
+        run(initClass, defaultScannerCb, config, args);
     }
 
     /**
      * 启动函数， 自定义的 cb, 缺省 JuzcarConfig
      * @param initClass
      */
-    public static void run(Class initClass, JuzcarScannerCb scannerCb){
-        run(initClass, scannerCb, JuzcarConfig.defaultJuzcarConfig());
+    public static void run(Class initClass, JuzcarScannerCb scannerCb, String[] args){
+        run(initClass, scannerCb, JuzcarConfig.defaultJuzcarConfig(), args);
     }
 
 
@@ -130,5 +144,9 @@ public class JuzcarServer {
 
     public HashMap<String, JuzcarApiList> getApis() {
         return apis;
+    }
+
+    public JuzcarTestServer getTestServer() {
+        return testServer;
     }
 }
