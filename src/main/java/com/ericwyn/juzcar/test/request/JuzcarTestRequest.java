@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class JuzcarTestRequest {
     // 需要测试的 Api
     private JuzcarApi juzcarApi;
-
+    private String testServerHost;
     // 测试的自定义参数
     private HashMap<String, String> requestParam;
 
@@ -25,6 +25,13 @@ public class JuzcarTestRequest {
         return null;
     }
 
+    public String getTestServerHost() {
+        return testServerHost;
+    }
+
+    public void setTestServerHost(String testServerHost) {
+        this.testServerHost = testServerHost;
+    }
 
     public JuzcarApi getJuzcarApi() {
         return juzcarApi;
