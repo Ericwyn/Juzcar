@@ -70,6 +70,16 @@ public class SpringBootUtils {
         return port;
     }
 
+    public String getSpringBootConfig(String key){
+        String resMap = null;
+        if (javaRunParamConfig != null && javaRunParamConfig.get(key) != null){
+            resMap = javaRunParamConfig.get(key);
+        } else if (springBootConfig != null && springBootConfig.get(key) != null){
+            resMap = springBootConfig.get(key);
+        }
+        return resMap;
+    }
+
     /**
      *
      * 自己实现的对 Spring Boot 配置文件的读取, 分别读的是下面的这些文件
