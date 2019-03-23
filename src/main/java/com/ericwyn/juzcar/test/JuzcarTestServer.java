@@ -30,7 +30,9 @@ public class JuzcarTestServer {
     public static JuzcarTestServer startServer(HashMap<String, JuzcarApiList> apis, String[] args){
         // 解析服务器地址
         String host = parseTestServerHost(args);
-        return new JuzcarTestServer(apis, host);
+        JuzcarTestServer testServer = new JuzcarTestServer(apis, host);
+        juzcarTestServer = testServer;
+        return testServer;
     }
 
     public static JuzcarTestServer getTestServer(){
