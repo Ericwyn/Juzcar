@@ -15,48 +15,51 @@ import java.util.Map;
  */
 public class JuzcarDocServerTest {
     public static void main(String[] args) throws WebServerException {
-        Map<String, List<JuzcarApi>> apiMaps = new HashMap<>();
-        ArrayList<JuzcarApi> apiList;
-
-        apiList = new ArrayList<>();
-        for (int i =0;i<10;i++){
-            JuzcarApi api = new JuzcarApi();
-            api = new JuzcarApi();
-            api.setReturnType(ReturnType.JSON);
-            api.setUrl(new String[]{"/api/v1/aaa"+i});
-            api.setMethod(new String[]{"POST"});
-            api.setParams(null);
-            apiList.add(api);
-        }
-        apiMaps.put("aaaController", apiList);
-
-
-        apiList = new ArrayList<>();
-        for (int i =0;i<10;i++){
-            JuzcarApi api = new JuzcarApi();
-            api = new JuzcarApi();
-            api.setReturnType(ReturnType.STRING);
-            api.setUrl(new String[]{"/api/v1/bbb"+i});
-            api.setMethod(new String[]{"GET"});
-            api.setParams(null);
-            apiList.add(api);
-        }
-        apiMaps.put("bbbController", apiList);
-
-        apiList = new ArrayList<>();
-        for (int i =0;i<10;i++){
-            JuzcarApi api = new JuzcarApi();
-            api = new JuzcarApi();
-            api.setReturnType(ReturnType.STRING);
-            api.setUrl(new String[]{"/api/v1/ccc"+i});
-            api.setMethod(new String[]{"POST"});
-            api.setParams(null);
-            apiList.add(api);
-        }
-        apiMaps.put("cccController", apiList);
+//        Map<String, List<JuzcarApi>> apiMaps = new HashMap<>();
+//        ArrayList<JuzcarApi> apiList;
+//
+//        apiList = new ArrayList<>();
+//        for (int i =0;i<10;i++){
+//            JuzcarApi api = new JuzcarApi();
+//            api = new JuzcarApi();
+//            api.setReturnType(ReturnType.JSON);
+//            api.setUrl(new String[]{"/api/v1/aaa"+i});
+//            api.setMethod(new String[]{"POST"});
+//            api.setParams(null);
+//            apiList.add(api);
+//        }
+//        apiMaps.put("aaaController", apiList);
+//
+//
+//        apiList = new ArrayList<>();
+//        for (int i =0;i<10;i++){
+//            JuzcarApi api = new JuzcarApi();
+//            api = new JuzcarApi();
+//            api.setReturnType(ReturnType.STRING);
+//            api.setUrl(new String[]{"/api/v1/bbb"+i});
+//            api.setMethod(new String[]{"GET"});
+//            api.setParams(null);
+//            apiList.add(api);
+//        }
+//        apiMaps.put("bbbController", apiList);
+//
+//        apiList = new ArrayList<>();
+//        for (int i =0;i<10;i++){
+//            JuzcarApi api = new JuzcarApi();
+//            api = new JuzcarApi();
+//            api.setReturnType(ReturnType.STRING);
+//            api.setUrl(new String[]{"/api/v1/ccc"+i});
+//            api.setMethod(new String[]{"POST"});
+//            api.setParams(null);
+//            apiList.add(api);
+//        }
+//        apiMaps.put("cccController", apiList);
 //
 //        JuzcarDocServer server = new JuzcarDocServer(apiMaps);
 //        server.startServer();
+
+
+        System.out.println(("https://baidu.com//api1/v1//ni/s").replaceAll("//","/"));
     }
 
 }
