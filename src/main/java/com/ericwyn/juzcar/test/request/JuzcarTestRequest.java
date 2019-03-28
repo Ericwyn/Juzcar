@@ -1,12 +1,14 @@
 package com.ericwyn.juzcar.test.request;
 
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
+import com.ericwyn.juzcar.test.http.JuzcarRequestUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
- * 一个 API 测试请求
+ * 一个 API 测试请求， 调用 test 方法，完成测试
  *
  * Created by Ericwyn on 19-3-23.
  */
@@ -20,9 +22,18 @@ public class JuzcarTestRequest {
     public JuzcarTestRequest() {
     }
 
-    public JuzcarTestResponse test(){
-        // TODO 具体的测试的逻辑
-        return null;
+    /**
+     * 测试所有可能的 API，包括 api uri 和 method
+     * @return
+     */
+    public List<JuzcarTestResponse> test(){
+        List<JuzcarTestResponse> responses = JuzcarRequestUtils.startRequest(this);
+        return responses;
+    }
+
+    public JuzcarTestResponse test(String uri, String method){
+        JuzcarTestResponse responses = JuzcarRequestUtils.startRequest(this, uri, method);
+        return responses;
     }
 
     public String getTestServerHost() {
