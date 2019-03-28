@@ -59,8 +59,7 @@ public class JuzcarDocServer {
                 .setServerPort(httpPort)
                 .addHandleMethod(Arrays.asList(
                         apiHandle.apiJsonHandle(),
-                        pageHandle.redireRootHandle(),
-                        pageHandle.indexPageHandle()
+                        pageHandle.redireRootHandle()
                 ))
                 .addHandleMethod(pageHandle.apiPageHandles())
                 .setWebRoot(".juzcar/static");

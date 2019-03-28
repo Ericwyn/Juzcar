@@ -53,7 +53,7 @@ public class TempleUtils {
         for (String key : apis.keySet()){
             navItemTemple.clearReplace()
                     .replace(TempleKey.NAVITEM_Name, apis.get(key).getClazz().getNote())
-                    .replace(TempleKey.NAVITEM_PackageName, getUriFromApiKey(key));
+                    .replace(TempleKey.NAVITEM_PackageName, getUriFromApiKey(key)+".html");
 
             nav += navItemTemple.string()+"\n";
         }
