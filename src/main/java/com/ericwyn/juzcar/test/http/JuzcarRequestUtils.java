@@ -1,8 +1,8 @@
 package com.ericwyn.juzcar.test.http;
 
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
-import com.ericwyn.juzcar.test.request.JuzcarTestRequest;
-import com.ericwyn.juzcar.test.request.JuzcarTestResponse;
+import com.ericwyn.juzcar.test.obj.JuzcarTestRequest;
+import com.ericwyn.juzcar.test.obj.JuzcarTestResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;

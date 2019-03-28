@@ -1,6 +1,7 @@
 package com.ericwyn.juzcar.scan.analysis;
 
 import com.ericwyn.juzcar.config.PackageName;
+import com.ericwyn.juzcar.scan.annotations.JuzcarDefaultValue;
 import com.ericwyn.juzcar.scan.annotations.JuzcarParamNote;
 import com.ericwyn.juzcar.scan.cb.ApiAnalysisCb;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
@@ -67,7 +68,11 @@ public class ApiAnalysis {
                 for(int i = 0; i < methods.length; i++){
                     apiMethods[i] = methods[i].toString();
                 }
-                api.setMethod(apiMethods);
+                if (apiMethods.length == 0){
+                    api.setMethod(new String[]{"POST", "GET"});
+                } else {
+                    api.setMethod(apiMethods);
+                }
                 // 设置 api 需要的参数
                 api.setParams(getParamFromMethodToApi(method));
                 api.setReturnType(getApiType(method));
@@ -209,11 +214,21 @@ public class ApiAnalysis {
                         for (Annotation an2 : annotations){
                             if (an2 instanceof JuzcarParamNote){
                                 juzcarParam.setNote(((JuzcarParamNote)an2).value());
-                                break;
+                            }
+                            if (an2 instanceof JuzcarDefaultValue){
+                                juzcarParam.setDefaultValue(((JuzcarDefaultValue)an2).value());
                             }
                         }
                         if (juzcarParam.getNote() == null){
                             juzcarParam.setNote("");
+                        }
+                        if (juzcarParam.getDefaultValue() == null){
+                            juzcarParam.setDefaultValue("");
+                        } else {
+                            // Magic ，特殊过滤，如果 default 没有设置的时候，那么默认会是这个值
+                            if (juzcarParam.getDefaultValue().equals("\n\t\t\n\t\t\n\uE000\uE001\uE002\n\t\t\t\t\n")){
+                                juzcarParam.setDefaultValue("");
+                            }
                         }
                         res.add(juzcarParam);
                     }

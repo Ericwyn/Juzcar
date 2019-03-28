@@ -2,12 +2,14 @@ package com.ericwyn.juzcar.test;
 
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
-import com.ericwyn.juzcar.test.request.JuzcarTestRequest;
-import com.ericwyn.juzcar.test.request.JuzcarTestResponse;
+import com.ericwyn.juzcar.test.http.JuzcarRequestUtils;
+import com.ericwyn.juzcar.test.obj.JuzcarTestRequest;
+import com.ericwyn.juzcar.test.obj.JuzcarTestResponse;
 import com.ericwyn.juzcar.utils.JuzcarLogs;
 import com.ericwyn.juzcar.utils.SpringBootUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -54,7 +56,7 @@ public class JuzcarTestServer {
      * @param requestParam
      * @return
      */
-    public JuzcarTestResponse testApi(String apiUrl, HashMap<String, String> requestParam){
+    public List<JuzcarTestResponse> testApi(String apiUrl, HashMap<String, String> requestParam){
         JuzcarApi trueApi = null;
         // api url 鉴定是否正确,  TODO 双重循环优化
         for (String key : apis.keySet()){
@@ -66,33 +68,34 @@ public class JuzcarTestServer {
             }
         }
         if (trueApi != null){
-            return testApi(trueApi, requestParam);
+            JuzcarTestRequest request = new JuzcarTestRequest(trueApi, this.testServerHost, requestParam);
+            return JuzcarRequestUtils.startRequest(request);
         } else {
             return null;
         }
     }
 
-    /**
-     * 传入一个 api, 进行测试
-     * @param api
-     * @return
-     */
-    public JuzcarTestResponse testApi(JuzcarApi api, HashMap<String, String> requestParam){
-        JuzcarTestRequest request = new JuzcarTestRequest();
-        request.setJuzcarApi(api);
-        request.setRequestParam(requestParam);
-        request.setTestServerHost(this.testServerHost);
-        return testApi(request);
-    }
-
-    /**
-     * 传入一个 testRequest 进行测试
-     * @param testRequest
-     * @return
-     */
-    public JuzcarTestResponse testApi(JuzcarTestRequest testRequest){
-        return testRequest.test();
-    }
+//    /**
+//     * 传入一个 api, 进行测试
+//     * @param api
+//     * @return
+//     */
+//    public JuzcarTestResponse testApi(JuzcarApi api, HashMap<String, String> requestParam){
+//        JuzcarTestRequest obj = new JuzcarTestRequest();
+//        obj.setJuzcarApi(api);
+//        obj.setRequestParam(requestParam);
+//        obj.setTestServerHost(this.testServerHost);
+//        return testApi(obj);
+//    }
+//
+//    /**
+//     * 传入一个 testRequest 进行测试
+//     * @param testRequest
+//     * @return
+//     */
+//    public JuzcarTestResponse testApi(JuzcarTestRequest testRequest, String uri, String method){
+//        return testRequest.test(uri, method);
+//    }
 
     /**
      * 解析测试服务器的 host

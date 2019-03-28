@@ -23,16 +23,17 @@ public class TempleKey {
     public static final String API_ControllerNote = "ControllerNote";
 
     // API List
-    public static final String APIITEM_ApiName ="ApiName";
-    public static final String APIITEM_ApiNote="ApiNote";
-    public static final String APIITEM_ApiURL ="ApiUri";
-    public static final String APIITEM_ApiMethod ="ApiMethod";
-    public static final String APIITEM_ParamItemList ="ParamItemList";
+    public static final String APIITEM_ApiName = "ApiName";
+    public static final String APIITEM_ApiNote = "ApiNote";
+    public static final String APIITEM_ApiURL = "ApiUri";
+    public static final String APIITEM_ApiMethod = "ApiMethod";
+    public static final String APIITEM_ParamItemList = "ParamItemList";
 
     // Param List
-    public static final String PARAMLIST_ParamName="ParamName";
-    public static final String PARAMLIST_ParamType="ParamType";
-    public static final String PARAMLIST_ParamRequire="ParamRequire";
-    public static final String PARAMLIST_ParamNote="ParamNote";
+    public static final String PARAMLIST_ParamName = "ParamName";
+    public static final String PARAMLIST_ParamType = "ParamType";
+    public static final String PARAMLIST_ParamRequire = "ParamRequire";
+    public static final String PARAMLIST_ParamNote = "ParamNote";
+    public static final String PARAMLIST_ParamValue = "ParamValue";
 
 }

@@ -1,4 +1,4 @@
-package com.ericwyn.juzcar.test.request;
+package com.ericwyn.juzcar.test.obj;
 
 /**
  * API 测试返回结果
@@ -45,5 +45,15 @@ public class JuzcarTestResponse {
 
     public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
+    }
+
+    @Override
+    public String toString() {
+        return "JuzcarTestResponse{" +
+                "request=" + request +
+                ", method='" + method + '\'' +
+                ", respText='" + respText + '\'' +
+                ", statusCode=" + statusCode +
+                '}';
     }
 }

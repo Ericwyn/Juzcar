@@ -71,6 +71,7 @@ public class TempleUtils {
                     .replace(TempleKey.PARAMLIST_ParamNote, param.getNote())
                     .replace(TempleKey.PARAMLIST_ParamRequire, param.getRequired() != null && param.getRequired()?"是":"否")
                     .replace(TempleKey.PARAMLIST_ParamType, param.getType().getName())
+                    .replace(TempleKey.PARAMLIST_ParamValue, param.getDefaultValue())
                     .string();
         }
         return resTml;

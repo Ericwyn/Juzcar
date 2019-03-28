@@ -1,4 +1,4 @@
-package com.ericwyn.juzcar.test.request;
+package com.ericwyn.juzcar.test.obj;
 
 import com.ericwyn.juzcar.scan.obj.JuzcarApi;
 import com.ericwyn.juzcar.test.http.JuzcarRequestUtils;
@@ -19,7 +19,10 @@ public class JuzcarTestRequest {
     // 测试的自定义参数
     private HashMap<String, String> requestParam;
 
-    public JuzcarTestRequest() {
+    public JuzcarTestRequest(JuzcarApi juzcarApi, String testServerHost, HashMap<String, String> requestParam) {
+        this.juzcarApi = juzcarApi;
+        this.testServerHost = testServerHost;
+        this.requestParam = requestParam;
     }
 
     /**

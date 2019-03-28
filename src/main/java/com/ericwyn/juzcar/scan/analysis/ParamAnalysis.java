@@ -1,5 +1,6 @@
 package com.ericwyn.juzcar.scan.analysis;
 
+import com.ericwyn.juzcar.scan.annotations.JuzcarDefaultValue;
 import com.ericwyn.juzcar.scan.annotations.JuzcarParamNote;
 import com.ericwyn.juzcar.scan.cb.ParamAnalysisCb;
 import com.ericwyn.juzcar.scan.obj.JuzcarParam;
@@ -101,9 +102,20 @@ public class ParamAnalysis {
                     if (an instanceof JuzcarParamNote){
                         juzcarParam.setNote(((JuzcarParamNote) an).value());
                     }
+                    if (an instanceof JuzcarDefaultValue){
+                        juzcarParam.setDefaultValue(((JuzcarDefaultValue) an).value());
+                    }
                 }
                 if (juzcarParam.getNote() == null){
                     juzcarParam.setNote("");
+                }
+                if (juzcarParam.getDefaultValue() == null){
+                    juzcarParam.setDefaultValue("");
+                } else {
+                    // Magic ，特殊过滤，如果 default 没有设置的时候，那么默认会是这个值
+                    if (juzcarParam.getDefaultValue().equals("\n\t\t\n\t\t\n\uE000\uE001\uE002\n\t\t\t\t\n")){
+                        juzcarParam.setDefaultValue("");
+                    }
                 }
                 res.add(juzcarParam);
             }
