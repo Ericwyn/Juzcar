@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -96,18 +97,29 @@ public class SpringBootUtils {
     private void readSpringBootConfigure(){
         //
         File configFile = null;
-        if ((configFile = readCurrentDirConfig()) != null
-            || (configFile = readCurrentConfig()) != null
-            || (configFile = readClassPathDirConfig()) != null
-            || (configFile = readClassPathConfig()) != null){
+        if ((configFile = readCurrentDirConfig()) != null){
+            JuzcarLogs.SOUT("/config 找到了配置文件");
+        }
+        else if ((configFile = readCurrentConfig()) != null){
+            JuzcarLogs.SOUT("/ 找到了配置文件");
+        }
+        else if ((configFile = readClassPathDirConfig()) != null){
+            JuzcarLogs.SOUT("classPath:/config 找到了配置文件");
+        }
+        else if ((configFile = readClassPathConfig()) != null){
+            JuzcarLogs.SOUT("classPath: 找到了配置文件");
+        }
 
-            if (configFile.getName().equals("properties")){
+        if (configFile != null){
+            if (configFile.getName().endsWith("properties")){
                 this.springBootConfig = parsePropertiesConfigFile(configFile);
             } else if (configFile.getName().endsWith("yml")){
                 this.springBootConfig = parseYamlConfigFile(configFile);
             } else {
                 this.springBootConfig = new HashMap<>();
             }
+        } else {
+            JuzcarLogs.SOUT("SpringBootUtils 无法找到 Spring Boot 配置文件");
         }
     }
 
@@ -193,6 +205,28 @@ public class SpringBootUtils {
      */
     private File readClassPathDirConfig(){
         // TODO classPath /config
+        ClassLoader classLoader = getClass().getClassLoader();
+        /**
+         getResource()方法会去classpath下找这个文件，获取到url resource, 得到这个资源后，调用url.getFile获取到 文件 的绝对路径
+         */
+        URL url = classLoader.getResource("config/" + PROPERTIES_CONFIG_FILE_NAME);
+        /**
+         * url.getFile() 得到这个文件的绝对路径
+         */
+        if (url != null){
+            File file = new File(url.getFile());
+            if (file.isFile()){
+                return file;
+            }
+        }
+
+        url = classLoader.getResource("config/" + YAML_CONFIG_FILE_NAME);
+        if (url != null){
+            File file = new File(url.getFile());
+            if (file.isFile()){
+                return file;
+            }
+        }
         return null;
     }
 
@@ -202,6 +236,34 @@ public class SpringBootUtils {
      */
     private File readClassPathConfig(){
         // TODO classPath 根目录
+
+        // TODO classPath /config
+        ClassLoader classLoader = getClass().getClassLoader();
+        /**
+         getResource()方法会去classpath下找这个文件，获取到url resource, 得到这个资源后，调用url.getFile获取到 文件 的绝对路径
+         */
+        URL url = classLoader.getResource(PROPERTIES_CONFIG_FILE_NAME);
+        /**
+         * url.getFile() 得到这个文件的绝对路径
+         */
+        if (url != null){
+            File file = new File(url.getFile());
+            if (file.isFile()){
+                return file;
+            }
+        }
+
+        url = classLoader.getResource(YAML_CONFIG_FILE_NAME);
+        if (url != null){
+            File file = new File(url.getFile());
+            if (file.isFile()){
+                return file;
+            }
+        }
+        /**
+         * url.getFile() 得到这个文件的绝对路径
+         */
+
         return null;
     }
 
