@@ -243,7 +243,12 @@ public class RequestParseUtil {
                         param.setKey(key.substring(0, key.length() - 1));  //去掉前后的 双引号
                     }
                 }
-                param.setValue(temp2[1]);
+                if (temp2.length > 1){
+                    param.setValue(temp2[1]);
+                } else {
+                    param.setValue("");
+                }
+
                 request.getParamMap().put(param.getKey(),param);
             }
         }else if (request.getContentType().contains("application/x-www-form-urlencoded")){
