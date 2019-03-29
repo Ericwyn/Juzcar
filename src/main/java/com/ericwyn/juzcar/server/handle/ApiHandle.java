@@ -93,7 +93,7 @@ public class ApiHandle {
         String[] paramStrsTemp = paramListStr.split(";");
         String[] paramTemp;
         for (String str : paramStrsTemp){
-            paramTemp = str.split(",");
+            paramTemp = str.split(":");
             if (paramTemp.length == 2){
                 resMap.put(paramTemp[0], paramTemp[1]);
             }
