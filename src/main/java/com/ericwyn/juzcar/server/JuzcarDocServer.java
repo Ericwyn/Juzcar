@@ -58,6 +58,7 @@ public class JuzcarDocServer {
         SimpleHttpServer.Builder builder = new SimpleHttpServer.Builder()
                 .setServerPort(httpPort)
                 .addHandleMethod(Arrays.asList(
+                        apiHandle.apiTestHandle(),
                         apiHandle.apiJsonHandle(),
                         pageHandle.redireRootHandle()
                 ))

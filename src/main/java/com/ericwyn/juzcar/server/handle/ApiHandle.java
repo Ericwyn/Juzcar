@@ -56,7 +56,7 @@ public class ApiHandle {
      * @return
      */
     public HandleMethod apiTestHandle(){
-        return new HandleMethod("/api/test") {
+        return new HandleMethod("/api/testJuzcarApi") {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
                 if (request.getMethod() == Request.METHOD_POST){
@@ -66,8 +66,8 @@ public class ApiHandle {
                         response.sendTextHtml("请求参数错误, 缺少 paramList 参数");
                     } else {
                         // 具体测试
-                        String uri = request.getParamMap().get("uri").toString();
-                        String paramList = request.getParamMap().get("paramList").toString();
+                        String uri = request.getParamMap().get("uri").getValue();
+                        String paramList = request.getParamMap().get("paramList").getValue();
                         JuzcarLogs.SOUT("收到测试请求, uri 参数：" + uri + "  paramList 参数： " + paramList);
                         HashMap<String, String> params = parseParamListStr(paramList);
                         // 调用测试 Server
