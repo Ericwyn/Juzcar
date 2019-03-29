@@ -31,7 +31,8 @@ function testThisApi(uri) {
             ["paramList", paramListStr]
         ],
         function (respText) {
-            clog(respText)
+            let json = JSON.parse(respText);
+            domId("testResp_"+uri).innerText = JSON.stringify(json, null, 4);
         },
         function (status) {
             clog(status)
