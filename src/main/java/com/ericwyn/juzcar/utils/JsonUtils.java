@@ -14,7 +14,9 @@ import java.util.function.Function;
 
 /**
  *
- * Json 处理工具，底层调用了 Jackson
+ * Json 处理工具，原生实现对 Object --> JSONString 的转换
+ *
+ * 代码参考 https://gitee.com/sp42_admin/ajaxjs/blob/master/ajaxjs-base/src/main/java/com/ajaxjs/js/JsonHelper.java
  *
  * Created by Ericwyn on 18-11-26.
  */
@@ -66,6 +68,16 @@ public class JsonUtils {
                 } else if (list.get(0) instanceof Map) { // Map 类型的输出
                     return toJson(list.toArray(new Map[list.size()]));
                 }
+//
+//                String resJsonStr = "[";
+//                for (int i=0 ; i < list.size() ; i++){
+//                    resJsonStr += toJson(list.get(i));
+//                    if (i != list.size() - 1){
+//                        resJsonStr += ",";
+//                    }
+//                }
+//                return resJsonStr+"]";
+
             } else {
                 return "[]";
             }

@@ -1,6 +1,5 @@
 package com.ericwyn.juzcar.server.handle;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ericwyn.ezerver.handle.HandleMethod;
 import com.ericwyn.ezerver.request.Request;
 import com.ericwyn.ezerver.response.Response;
@@ -8,6 +7,7 @@ import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.server.out.OutputService;
 import com.ericwyn.juzcar.test.JuzcarTestServer;
 import com.ericwyn.juzcar.test.obj.JuzcarTestResponse;
+import com.ericwyn.juzcar.utils.JsonUtils;
 import com.ericwyn.juzcar.utils.JuzcarLogs;
 
 import java.io.File;
@@ -72,12 +72,20 @@ public class ApiHandle {
                         HashMap<String, String> params = parseParamListStr(paramList);
                         // 调用测试 Server
                         List<JuzcarTestResponse> responsesList = JuzcarTestServer.getTestServer().testApi(uri, params);
-                        String res = "";
-                        for (JuzcarTestResponse resp : responsesList){
-                            res += resp.toString()+"\n";
+                        String res = "[";
+                        int index = 0;
+                        for (JuzcarTestResponse respTemp : responsesList) {
+                            index++;
+                            respTemp.setRequest(null);
+                            String jsonTemp = JsonUtils.toJson(respTemp);
+                            if (index < responsesList.size()){
+                                res += jsonTemp + ",";
+                            } else {
+                                res += jsonTemp + "";
+                            }
                         }
-                        // 返回结果
-                        response.sendTextHtml(res);
+
+                        response.sendTextHtml(res+"]");
                     }
                     response.closeStream();
                 } else {
