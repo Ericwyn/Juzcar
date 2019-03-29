@@ -19,7 +19,7 @@ function testThisApi(uri) {
     let paramListStr = "";
     for (let i = 0; i < paramListDom.children.length; i++){
         let paramItemDom = paramListDom.children[i];
-        console.log(paramItemDom);
+        // console.log(paramItemDom);
         let paramName = paramItemDom.children[0].innerText;
         let paramValue = paramItemDom.children[4].children[0].children[0].value;
         paramListStr += paramName+":"+paramValue+";";

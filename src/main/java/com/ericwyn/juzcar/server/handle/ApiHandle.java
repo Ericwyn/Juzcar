@@ -8,7 +8,6 @@ import com.ericwyn.juzcar.server.out.OutputService;
 import com.ericwyn.juzcar.test.JuzcarTestServer;
 import com.ericwyn.juzcar.test.obj.JuzcarTestResponse;
 import com.ericwyn.juzcar.utils.JsonUtils;
-import com.ericwyn.juzcar.utils.JuzcarLogs;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +67,7 @@ public class ApiHandle {
                         // 具体测试
                         String uri = request.getParamMap().get("uri").getValue();
                         String paramList = request.getParamMap().get("paramList").getValue();
-                        JuzcarLogs.SOUT("收到测试请求, uri 参数：" + uri + "  paramList 参数： " + paramList);
+//                        JuzcarLogs.SOUT("收到测试请求, uri 参数：" + uri + "  paramList 参数： " + paramList);
                         HashMap<String, String> params = parseParamListStr(paramList);
                         // 调用测试 Server
                         List<JuzcarTestResponse> responsesList = JuzcarTestServer.getTestServer().testApi(uri, params);
