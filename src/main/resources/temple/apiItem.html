@@ -22,19 +22,14 @@
                     <th>默认值</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="paramList_{{.ApiUri}}">
                 {{.ParamItemList}}
                 </tbody>
             </table>
         </div>
     </div>
-
     <div class="juzcar-api-test-card mdui-card mdui-typo mdui-p-a-2" >
-        <button class="mdui-btn mdui-color-theme mdui-text-color-white">测试</button>
-        <hr/>
-        <div class="juzcar-api-test-params">
-
-        </div>
+        <button class="mdui-btn mdui-color-theme mdui-text-color-white" onclick="testThisApi('{{.ApiUri}}')">测试</button>
         <hr/>
         运行结果如下
         <pre>

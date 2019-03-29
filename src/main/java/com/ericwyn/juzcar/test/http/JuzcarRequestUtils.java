@@ -89,8 +89,10 @@ public class JuzcarRequestUtils {
         if (testRespTemp != null && testRespTemp.get("respText") != null) {
             response.setRespText(testRespTemp.get("respText").toString());
         }
-        // TODO 设置返回的 status
-
+        // 设置返回的 status
+        if (testRespTemp != null && testRespTemp.get("code") != null) {
+            response.setStatusCode((Integer) testRespTemp.get("code"));
+        }
         return response;
     }
 
@@ -101,12 +103,9 @@ public class JuzcarRequestUtils {
      * @return
      */
     private static HashMap<String , Object> postRequest(JuzcarTestRequest request, String apiUri){
-        String url = (request.getTestServerHost()+"/"+apiUri).replaceAll("//","/");
+        String url = "http://" + (request.getTestServerHost()+"/"+apiUri).replaceAll("//","/");
         HashMap<String, String> params = request.getRequestParam();
-        String respText = HttpRequest.post(url, params, defalutConnectTimeOut, defaultReadTimeOut, defaultCharset);
-        HashMap<String, Object> resMap = new HashMap<>();
-        resMap.put("respText", respText);
-        return resMap;
+        return HttpRequest.post(url, params, defalutConnectTimeOut, defaultReadTimeOut, defaultCharset);
     }
 
     /**
@@ -116,11 +115,8 @@ public class JuzcarRequestUtils {
      * @return
      */
     private static HashMap<String, Object> getRequest(JuzcarTestRequest request, String apiUri){
-        String url = (request.getTestServerHost()+"/"+apiUri).replaceAll("//","/");
+        String url = "http://" + (request.getTestServerHost()+"/"+apiUri).replaceAll("//","/");
         HashMap<String, String> params = request.getRequestParam();
-        String respText = HttpRequest.get(url, params, defalutConnectTimeOut, defaultReadTimeOut, defaultCharset);
-        HashMap<String, Object> resMap = new HashMap<>();
-        resMap.put("respText", respText);
-        return resMap;
+        return HttpRequest.get(url, params, defalutConnectTimeOut, defaultReadTimeOut, defaultCharset);
     }
 }

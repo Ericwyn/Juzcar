@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class HttpRequest {
      * @param method
      * @return
      */
-    private static String invokeUrl(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String encoding, HttpMethod method){
+    private static HashMap<String, Object> invokeUrl(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String encoding, HttpMethod method){
         //构造请求参数字符串
         StringBuilder paramsStr = null;
         if(params != null){
@@ -97,18 +98,24 @@ public class HttpRequest {
                 out.write(paramsStr.toString());
                 out.flush();
             }
+            int responseCode = conn.getResponseCode();
 
-            //接收返回结果
             StringBuilder result = new StringBuilder();
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream(),encoding));
+            if (responseCode != 200){
+                in = new BufferedReader(new InputStreamReader(conn.getErrorStream(),encoding));
+            } else {
+                in = new BufferedReader(new InputStreamReader(conn.getInputStream(),encoding));
+            }
             if(in != null){
                 String line = "";
                 while ((line = in.readLine()) != null) {
                     result.append(line);
                 }
             }
-            return result.toString();
+            return responseMap(responseCode, result.toString());
+
         } catch (Exception e) {
+            e.printStackTrace();
             //处理错误流，提高http连接被重用的几率
             try {
                 byte[] buf = new byte[100];
@@ -153,7 +160,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String post(String url, Map params, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> post(String url, Map params, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,null,connectTimeout,readTimeout,charset,HttpMethod.POST);
     }
 
@@ -168,7 +175,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String post(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> post(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,headers,connectTimeout,readTimeout,charset,HttpMethod.POST);
     }
 
@@ -181,7 +188,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String get(String url, Map params, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> get(String url, Map params, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,null,connectTimeout,readTimeout,charset,HttpMethod.GET);
     }
 
@@ -195,7 +202,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String get(String url, Map params, Map<String,String> headers,int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> get(String url, Map params, Map<String,String> headers,int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,headers,connectTimeout,readTimeout,charset,HttpMethod.GET);
     }
 
@@ -209,7 +216,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String put(String url, Map params, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> put(String url, Map params, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,null,connectTimeout,readTimeout,charset,HttpMethod.PUT);
     }
 
@@ -224,7 +231,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String put(String url, Map params, Map<String,String> headers,int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> put(String url, Map params, Map<String,String> headers,int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,headers,connectTimeout,readTimeout,charset,HttpMethod.PUT);
     }
 
@@ -237,7 +244,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String delete(String url, Map params, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> delete(String url, Map params, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,null,connectTimeout,readTimeout,charset,HttpMethod.DELETE);
     }
 
@@ -251,7 +258,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String delete(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> delete(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,headers,connectTimeout,readTimeout,charset,HttpMethod.DELETE);
     }
 
@@ -265,7 +272,7 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String head(String url, Map params, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> head(String url, Map params, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,null,connectTimeout,readTimeout,charset,HttpMethod.HEAD);
     }
 
@@ -280,15 +287,15 @@ public class HttpRequest {
      * @param charset 字符集（一般该为“utf-8”）
      * @return
      */
-    public static String head(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
+    public static HashMap<String, Object> head(String url, Map params, Map<String,String> headers, int connectTimeout, int readTimeout, String charset){
         return invokeUrl(url,params,headers,connectTimeout,readTimeout,charset,HttpMethod.HEAD);
     }
 
-    public static void main(String[] args) {
-        //Map params = new HashMap();
-        //params.put("phoneNo", "中文");
-        //String str = HttpUtil.get("http://localhost:9092/elis_smp_als_dmz/do/app/activitySupport/demo", params, 3000, 3000, "UTF-8");
-        //System.out.println(str);
+    private static HashMap<String, Object> responseMap(int code, String respText){
+        HashMap<String, Object> resMap = new HashMap<>();
+        resMap.put("code", code);
+        resMap.put("respText", respText);
+        return resMap;
     }
 
 }

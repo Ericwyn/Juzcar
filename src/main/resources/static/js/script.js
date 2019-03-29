@@ -14,6 +14,33 @@ function outPutHTMLDocument() {
     window.open("/api/outPutHTMLDocument");
 }
 
+function testThisApi(uri) {
+    let paramListDom = domId("paramList_"+uri);
+    let paramListStr = "";
+    for (let i = 0; i < paramListDom.children.length; i++){
+        let paramItemDom = paramListDom.children[i];
+        console.log(paramItemDom);
+        let paramName = paramItemDom.children[0].innerText;
+        let paramValue = paramItemDom.children[4].children[0].children[0].value;
+        paramListStr += paramName+":"+paramValue+";";
+    }
+    ajax_post(
+        "/api/testJuzcarApi",
+        [
+            ["uri",uri],
+            ["paramList", paramListStr]
+        ],
+        function (respText) {
+            clog(respText)
+        },
+        function (status) {
+            clog(status)
+        }
+    );
+
+    console.log(paramListStr)
+}
+
 //-------------工具方法分割---------------
 
 
