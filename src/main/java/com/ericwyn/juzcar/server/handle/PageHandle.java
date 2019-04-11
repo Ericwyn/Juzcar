@@ -41,21 +41,7 @@ public class PageHandle {
         HttpTemple apiPageTemple = new HttpTemple(TempleUtils.getTemple("controller"));
         for (String key : apis.keySet()){
             requestUri = TempleUtils.getUriFromApiKey(key);
-            handleMethods.add(new HandleMethod(requestUri +".html") {
-                @Override
-                public void requestDo(Request request, Response response) throws IOException {
-                    String apiPageHTML = apiPageTemple.clearReplace()
-                            .replace(TempleKey.API_Nav, TempleUtils.getNavTemple(apis))
-                            .replace(TempleKey.API_PackgeName, key)
-                            .replace(TempleKey.API_ControllerNote, apis.get(key).getClazz().getNote())
-                            .replace(TempleKey.API_ApiList, TempleUtils.getApiListTemple(apis.get(key)))
-                            .string();
-                    response.sendTextHtml(apiPageHTML);
-                    response.closeStream();
-                }
-            });
-            // 冗余设计
-            handleMethods.add(new HandleMethod(requestUri) {
+            handleMethods.add(new HandleMethod("([/]){0,1}"+requestUri+"+([.]+[h]+[t]+[m]+[l]){0,1}", true) {
                 @Override
                 public void requestDo(Request request, Response response) throws IOException {
                     String apiPageHTML = apiPageTemple.clearReplace()
@@ -69,19 +55,8 @@ public class PageHandle {
                 }
             });
         }
-        handleMethods.add(new HandleMethod("index.html") {
-            @Override
-            public void requestDo(Request request, Response response) throws IOException {
-                HttpTemple temple = new HttpTemple(TempleUtils.getTemple("index"));
-                response.sendTextHtml(temple
-                        .replace(TempleKey.INDEX_README, "README")
-                        .replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis))
-                        .string());
-                response.closeStream();
-            }
-        });
 
-        handleMethods.add(new HandleMethod("index") {
+        handleMethods.add(new HandleMethod("([/]){0,1}index+([.]+[h]+[t]+[m]+[l]){0,1}", true) {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
                 HttpTemple temple = new HttpTemple(TempleUtils.getTemple("index"));
