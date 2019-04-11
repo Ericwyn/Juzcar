@@ -98,16 +98,16 @@ public class SpringBootUtils {
         //
         File configFile = null;
         if ((configFile = readCurrentDirConfig()) != null){
-            JuzcarLogs.SOUT("/config 找到了配置文件");
+            JuzcarLogs.SOUT("/config 找到了 Spring Boot 配置文件");
         }
         else if ((configFile = readCurrentConfig()) != null){
-            JuzcarLogs.SOUT("/ 找到了配置文件");
+            JuzcarLogs.SOUT("/ 找到了 Spring Boot 配置文件");
         }
         else if ((configFile = readClassPathDirConfig()) != null){
-            JuzcarLogs.SOUT("classPath:/config 找到了配置文件");
+            JuzcarLogs.SOUT("classPath: /config 找到了 Spring Boot 配置文件");
         }
         else if ((configFile = readClassPathConfig()) != null){
-            JuzcarLogs.SOUT("classPath: 找到了配置文件");
+            JuzcarLogs.SOUT("classPath: 找到了 Spring Boot 配置文件");
         }
 
         if (configFile != null){
