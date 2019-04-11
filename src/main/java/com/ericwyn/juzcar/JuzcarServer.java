@@ -54,21 +54,14 @@ public class JuzcarServer {
             public void run() {
                 // 先设置 log flag
                 JuzcarLogs.setLogFalg(config.isJuzcarServerLog());
-
                 // scan 模块
                 List<JuzcarClass> juzcarClasses = ScannerUtils.scannerAllController(initClass);
-
-//                ScannerUtils.removeTheIgnoreController(juzcarClasses);
                 // 以 Controller 名称分组，扫描其中的方法
                 HashMap<String, JuzcarMethodList> juzcarMethodListMap = ScannerUtils.scannerMethods(juzcarClasses);
                 // 针对方法扫描出具体的 API
                 HashMap<String, JuzcarApiList> apis = ScannerUtils.scannerAPI(juzcarMethodListMap);
 
                 JuzcarServer juzcarServer = new JuzcarServer(initClass, apis, args);
-
-
-//            System.out.println(JSONObject.toJSONString(apis));
-//            System.out.println(juzcarClasses.size());
 
                 // Doc server 模块
                 try {
