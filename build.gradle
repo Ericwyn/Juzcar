@@ -10,7 +10,7 @@ tasks.withType(JavaCompile) {
 
 jar {
     baseName = 'Juzcar'
-    version = 'v1.0-beta.1'
+    version = 'v1.0-beta.2'
 }
 
 processResources {
