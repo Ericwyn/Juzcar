@@ -37,7 +37,7 @@ RESTful API document auto-generation tools, depends on the Spring framework
             <version>Tag</version>
         </dependency>
 
-## Gradle
+### Gradle
  - Step 1. Add it in your root build.gradle at the end of repositories:
            
         allprojects {
@@ -53,7 +53,7 @@ RESTful API document auto-generation tools, depends on the Spring framework
                 implementation 'com.github.Ericwyn:Juzcar:Tag'
         }
 
-## Download JAR
+### Download JAR
 You can download the JAR file in [JitPack](https://jitpack.io/#Ericwyn/Juzcar)
  - open the log about one commit's build, just like
     > https://jitpack.io/com/github/Ericwyn/Juzcar/e6a171b897/build.log
