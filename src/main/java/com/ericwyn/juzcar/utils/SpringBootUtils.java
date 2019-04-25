@@ -18,7 +18,7 @@ public class SpringBootUtils {
 
 
     private final String PROPERTIES_CONFIG_FILE_NAME = "application.properties";
-    private final String YAML_CONFIG_FILE_NAME = "application.properties";
+    private final String YAML_CONFIG_FILE_NAME = "application.yml";
 
     // 配置文件获取的配置
     private HashMap<String, String> springBootConfig = null;
@@ -129,11 +129,6 @@ public class SpringBootUtils {
      * @return
      */
     private HashMap<String, String> parsePropertiesConfigFile(File configFile){
-        // 名字判断
-//        if (!configFile.getName().equals(PROPERTIES_CONFIG_FILE_NAME)){
-//            return null;
-//        }
-
         HashMap<String, String> resMap = new HashMap<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(configFile));
@@ -235,9 +230,6 @@ public class SpringBootUtils {
      * @return
      */
     private File readClassPathConfig(){
-        // TODO classPath 根目录
-
-        // TODO classPath /config
         ClassLoader classLoader = getClass().getClassLoader();
         /**
          getResource()方法会去classpath下找这个文件，获取到url resource, 得到这个资源后，调用url.getFile获取到 文件 的绝对路径
