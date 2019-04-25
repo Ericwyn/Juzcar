@@ -60,6 +60,11 @@ public class TempleUtils {
         return nav;
     }
 
+    /**
+     * 渲染 API 列表当中各个 API 的参数列表
+     * @param api
+     * @return
+     */
     public static String getParamListTemple(JuzcarApi api){
         String resTml = "";
         for (JuzcarParam param : api.getParams()){
@@ -77,6 +82,11 @@ public class TempleUtils {
         return resTml;
     }
 
+    /**
+     * 渲染 API 列表
+     * @param apiList
+     * @return
+     */
     public static String getApiListTemple(JuzcarApiList apiList){
         String resTml = "";
         for (JuzcarApi api : apiList.getApis()){
