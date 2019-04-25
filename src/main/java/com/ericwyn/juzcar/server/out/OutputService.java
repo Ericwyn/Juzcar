@@ -114,7 +114,7 @@ public class OutputService {
         File outIndexPage = new File(saveDir, "index.html");
         FileUtils.writeToFile(
                 outIndexPage,
-                temple.replace(TempleKey.INDEX_README, "README")
+                temple.replace(TempleKey.INDEX_README, "欢迎使用 Juzcar ，一个简单、快捷的 Web API 文档自动生成工具。")
                         .replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis))
                         .string()
         );
