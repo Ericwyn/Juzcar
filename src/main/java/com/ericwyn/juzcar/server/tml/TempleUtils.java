@@ -50,9 +50,16 @@ public class TempleUtils {
      */
     public static String getNavTemple(Map<String, JuzcarApiList> apis){
         String nav = "";
+        String navName;
+        String[] split;
         for (String key : apis.keySet()){
+            navName = apis.get(key).getClazz().getNote();
+            if (navName.trim().equals("")){
+                split = key.split(".");
+                navName = split[split.length-1];
+            }
             navItemTemple.clearReplace()
-                    .replace(TempleKey.NAVITEM_Name, apis.get(key).getClazz().getNote())
+                    .replace(TempleKey.NAVITEM_Name, navName)
                     .replace(TempleKey.NAVITEM_PackageName, getUriFromApiKey(key)+".html");
 
             nav += navItemTemple.string()+"\n";
