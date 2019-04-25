@@ -55,8 +55,12 @@ public class TempleUtils {
         for (String key : apis.keySet()){
             navName = apis.get(key).getClazz().getNote();
             if (navName.trim().equals("")){
-                split = key.split(".");
-                navName = split[split.length-1];
+                split = key.split("\\.");
+                if (split.length - 1 >= 0){
+                    navName = split[split.length-1];
+                } else {
+                    navName = key;
+                }
             }
             navItemTemple.clearReplace()
                     .replace(TempleKey.NAVITEM_Name, navName)
