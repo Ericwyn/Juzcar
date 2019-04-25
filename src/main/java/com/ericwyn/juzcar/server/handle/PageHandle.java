@@ -41,6 +41,7 @@ public class PageHandle {
         HttpTemple apiPageTemple = new HttpTemple(TempleUtils.getTemple("controller"));
         for (String key : apis.keySet()){
             requestUri = TempleUtils.getUriFromApiKey(key);
+            // 匹配 /{requestUri}.html 或者 /{requestUri}
             handleMethods.add(new HandleMethod("([/]){0,1}"+requestUri+"+([.]+[h]+[t]+[m]+[l]){0,1}", true) {
                 @Override
                 public void requestDo(Request request, Response response) throws IOException {
@@ -55,13 +56,13 @@ public class PageHandle {
                 }
             });
         }
-
+        // 匹配 /index.html 或者 /index
         handleMethods.add(new HandleMethod("([/]){0,1}index+([.]+[h]+[t]+[m]+[l]){0,1}", true) {
             @Override
             public void requestDo(Request request, Response response) throws IOException {
                 HttpTemple temple = new HttpTemple(TempleUtils.getTemple("index"));
                 response.sendTextHtml(temple
-                        .replace(TempleKey.INDEX_README, "README")
+                        .replace(TempleKey.INDEX_README, "欢迎使用 Juzcar ，一个简单、快捷的 Web API 文档自动生成工具。")
                         .replace(TempleKey.INDEX_Nav, TempleUtils.getNavTemple(apis))
                         .string());
                 response.closeStream();
