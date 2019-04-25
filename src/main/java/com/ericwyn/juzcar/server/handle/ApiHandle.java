@@ -32,7 +32,7 @@ public class ApiHandle {
      *
      * @return
      */
-    public HandleMethod apiJsonHandle(){
+    public HandleMethod outPutHTMLDocument(){
         return new HandleMethod("/api/outPutHTMLDocument") {
             @Override
             public void requestDo(Request request, Response response) throws IOException {

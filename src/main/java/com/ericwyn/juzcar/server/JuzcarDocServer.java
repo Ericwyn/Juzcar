@@ -59,7 +59,7 @@ public class JuzcarDocServer {
                 .setServerPort(httpPort)
                 .addHandleMethod(Arrays.asList(
                         apiHandle.apiTestHandle(),
-                        apiHandle.apiJsonHandle(),
+                        apiHandle.outPutHTMLDocument(),
                         pageHandle.redireRootHandle()
                 ))
                 .addHandleMethod(pageHandle.apiPageHandles())
