@@ -19,12 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Ericwyn on 18-11-25.
@@ -61,14 +56,11 @@ public class ScannerUtils {
         try {
             // 这里确认 url 是一个文件的位置
             if (url.toString().startsWith("file")){
-//                System.out.println(url.toString());
-//                System.out.println(path);
-//                System.out.println(url.toString().indexOf(path));
-//
-//                System.out.println(url.toString().substring(url.toString().indexOf(path)));
-
                 JuzcarLogs.SOUT("扫描的文件 : "+url.toString());
                 int packageNameStart = url.toString().indexOf(path);
+                if (System.getProperty("os.name").toLowerCase().startsWith("window")){
+                    packageNameStart--;
+                }
                 String filePath = URLDecoder.decode(url.getFile(),"utf-8");
                 File dir = new File(filePath);
                 List<File> fileList = new ArrayList<>();
@@ -78,8 +70,15 @@ public class ScannerUtils {
                     if(fileName.endsWith("class")){
                         String fileUrl = "file:"+fileName;
                         // 后面减去 6 减去的是 ".class"
-                        String nosuffixFileName = fileUrl.substring(packageNameStart, fileUrl.length()-6);
-                        String filePackage = nosuffixFileName.replaceAll("/", ".");
+                        String nosuffixFileName ;
+                        if (fileUrl.endsWith(".class")){
+                            nosuffixFileName = fileUrl.substring(packageNameStart, fileUrl.length()-6);
+                        } else {
+                            nosuffixFileName = fileUrl;
+                        }
+                        String filePackage = nosuffixFileName
+                                .replaceAll("/", ".")
+                                .replaceAll("\\\\",".");
                         Class<?> clazz = Class.forName(filePackage);
                         // 扫描得到了 Class 之后
                         callback.callback(f,clazz);

@@ -6,7 +6,6 @@ import com.ericwyn.juzcar.scan.obj.JuzcarApiList;
 import com.ericwyn.juzcar.server.config.JuzcarDocConfig;
 import com.ericwyn.juzcar.server.handle.ApiHandle;
 import com.ericwyn.juzcar.server.handle.PageHandle;
-import com.ericwyn.juzcar.utils.JuzcarLogs;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,19 +71,8 @@ public class JuzcarDocServer {
 
     // 将打包得到的 jar 里面的 static 文件夹，复制到 .juzcar 文件夹里面，以此获得 WEBROOT
     private void copyStaticFileFromJar() throws IOException {
-        // resource:/media/ericwyn/Work/Chaos/IntiliJ_Java_Project/juzcart/target/classes/
-        File staticDir = new File(JUZCAR_TEMP_DIR);
-        if (!staticDir.isDirectory()){
-            staticDir.mkdirs();
-        }
-        String path = this.getClass().getClassLoader().getResource("static").getPath();
-        if (!path.contains(".jar!")){
-            JuzcarLogs.SOUT("NOTE!!!! Juzcar 不是以 JAR 形式导入，可能会无法获取所需静态资源文件");
-        } else {
-            JuzcarLogs.SOUT("Juzcar 已经成功以 JAR 的形式导入");
-        }
-        path = path.substring(5);
-        path = path.substring(0,path.indexOf(".jar!")+4);
+        // 直接获取当前 jar 包路径
+        String path = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         JarFile jarFile = new JarFile(path);
         Enumeration<JarEntry> entries = jarFile.entries();
         String name ;
